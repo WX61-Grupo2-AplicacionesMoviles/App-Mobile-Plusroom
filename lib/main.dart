@@ -315,6 +315,27 @@ class _PropertiesPageState extends State<PropertiesPage> {
                   property['location'],
                   style: const TextStyle(color: Colors.white),
                 ),
+                const SizedBox(height: 10.0),
+                // Aquí agregas el botón de Detalles
+                Align(
+                  alignment: Alignment.centerRight, // Alinear el botón a la derecha
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Aquí puedes definir la acción del botón
+                      // Por ejemplo, mostrar un diálogo o una notificación
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Detalles de ${property['title']}'),
+                        ),
+                      );
+                    },
+                    child: const Text('Detalles'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF002C3E), // Color de fondo del botón
+                      foregroundColor: Colors.white, // Color del texto del botón
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -322,4 +343,5 @@ class _PropertiesPageState extends State<PropertiesPage> {
       },
     );
   }
+
 }
