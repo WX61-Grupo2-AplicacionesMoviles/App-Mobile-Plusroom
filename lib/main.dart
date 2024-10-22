@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
@@ -7,119 +9,317 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF064789), // Color del tema principal
+        ),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const PropertiesPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class PropertiesPage extends StatefulWidget {
+  const PropertiesPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<PropertiesPage> createState() => _PropertiesPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _PropertiesPageState extends State<PropertiesPage> {
+  int selectedSection = 0; // Sección seleccionada
+  List<Map<String, dynamic>> properties = [];
+  List<Map<String, dynamic>> filteredProperties = [];
+  TextEditingController searchController = TextEditingController();
+  String? selectedCategory;
 
-  void _incrementCounter() {
+  @override
+  void initState() {
+    super.initState();
+    fetchProperties();
+  }
+
+  Future<void> fetchProperties() async {
+    final response = await http.get(Uri.parse(
+        'https://giving-perception-production.up.railway.app/api/posts'));
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      setState(() {
+        properties = data.map((item) => item as Map<String, dynamic>).toList();
+        filteredProperties = properties;
+      });
+    } else {
+      throw Exception('Failed to load properties');
+    }
+  }
+
+  void filterProperties(String location) {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      filteredProperties = properties.where((property) {
+        final matchesLocation = property['location'].toLowerCase().contains(location.toLowerCase());
+        final matchesCategory = selectedCategory == null || property['category'].toLowerCase() == selectedCategory!.toLowerCase();
+        return matchesLocation && matchesCategory;
+      }).toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text(
+          _getAppBarTitle(), // Cambiado para obtener el título basado en la sección
+          style: const TextStyle(color: Color(0xFF064789)),
+        ),
+        iconTheme: const IconThemeData(color: Color(0xFF064789)),
+        backgroundColor: Colors.white,
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+      body: _buildBody(), // Cambiado para construir el cuerpo
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: selectedSection,
+        onTap: (index) {
+          setState(() {
+            selectedSection = index;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home, color: Color(0xFF064789)),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search, color: Color(0xFF064789)),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF002C3E), // Color del botón central
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.add, color: Colors.white), // Ícono del botón central
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            label: 'Add Property',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.message, color: Color(0xFF064789)),
+            label: 'Messages',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person, color: Color(0xFF064789)),
+            label: 'Profile',
+          ),
+        ],
+        backgroundColor: Colors.white, // Fondo de la barra de navegación
+        selectedItemColor: const Color(0xFF064789), // Color de los íconos seleccionados
+        unselectedItemColor: const Color(0xFF064789), // Color de los íconos no seleccionados
+      ),
+    );
+  }
+
+  // Método para obtener el título del AppBar basado en la sección seleccionada
+  String _getAppBarTitle() {
+    switch (selectedSection) {
+      case 0:
+        return 'Home';
+      case 1:
+        return 'Search';
+      case 2:
+        return 'Add Property';
+      case 3:
+        return 'Messages';
+      case 4:
+        return 'Profile';
+      default:
+        return 'Home';
+    }
+  }
+
+  // Método para construir el cuerpo de la pantalla
+  Widget _buildBody() {
+    switch (selectedSection) {
+      case 0:
+        return const Center(child: Text('Home', style: TextStyle(fontSize: 24)));
+      case 1:
+        return _buildSearchContent(); // Muestra el contenido de búsqueda aquí
+      case 2:
+        return const Center(child: Text('Add Property', style: TextStyle(fontSize: 24)));
+      case 3:
+        return const Center(child: Text('Messages', style: TextStyle(fontSize: 24)));
+      case 4:
+        return const Center(child: Text('Profile', style: TextStyle(fontSize: 24)));
+      default:
+        return const Center(child: Text('Home', style: TextStyle(fontSize: 24)));
+    }
+  }
+
+  // Método para construir el contenido de búsqueda
+  Widget _buildSearchContent() {
+    return Column(
+      children: [
+        _buildSearchBar(), // Muestra la barra de búsqueda
+        _buildFilters(), // Muestra los filtros
+        Expanded(child: _buildPropertyList()), // Muestra la lista de propiedades
+      ],
+    );
+  }
+
+  // Método para construir la barra de búsqueda
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+          color: Colors.grey[200],
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: searchController,
+                decoration: InputDecoration(
+                  hintText: 'Enter a location',
+                  hintStyle: const TextStyle(color: Color(0xFF064789)),
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.all(10.0),
+                ),
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.search, color: Color(0xFF064789)),
+              onPressed: () {
+                filterProperties(searchController.text);
+              },
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  // Método para construir los filtros
+  Widget _buildFilters() {
+    final filters = ['Apartment', 'Room', 'House'];
+
+    return SizedBox(
+      height: 50.0,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: filters.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: ChoiceChip(
+              label: Text(
+                filters[index],
+                style: const TextStyle(color: Colors.white),
+              ),
+              selected: selectedCategory == filters[index],
+              selectedColor: const Color(0xFF064789),
+              backgroundColor: Colors.grey,
+              onSelected: (isSelected) {
+                setState(() {
+                  if (isSelected) {
+                    selectedCategory = filters[index];
+                  } else {
+                    selectedCategory = null;
+                  }
+                  filterProperties(searchController.text);
+                });
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  // Método para construir la lista de propiedades
+  Widget _buildPropertyList() {
+    if (filteredProperties.isEmpty) {
+      return const Center(
+        child: Text(
+          'No properties found for this location.',
+          style: TextStyle(fontSize: 18, color: Colors.red),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      itemCount: filteredProperties.length,
+      itemBuilder: (context, index) {
+        final property = filteredProperties[index];
+        return Card(
+          color: const Color(0xFF064789),
+          margin: const EdgeInsets.all(10.0),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        property['title'],
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Text(
+                      '\$${property['price']}',
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10.0),
+                Center(
+                  child: SizedBox(
+                    width: 200,
+                    height: 150,
+                    child: Image.network(
+                      property['urlPhoto'],
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(Icons.error);
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+                Text(
+                  property['description'],
+                  style: const TextStyle(color: Colors.white),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 5.0),
+                Text(
+                  property['location'],
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
