@@ -88,8 +88,9 @@ class _PropertiesPageState extends State<PropertiesPage> {
           child: PropertyList(
             properties: filteredProperties,
             onDetailsPressed: () {
-              // Acción al presionar detalles
+
             },
+            onRefresh: fetchProperties,
           ),
         ),
       ],
