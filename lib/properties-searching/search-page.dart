@@ -32,9 +32,9 @@ class _PropertiesPageState extends State<PropertiesPage> {
       setState(() {
         properties = posts;
         if (selectedCategory != null) {
-          filterProperties(searchController.text); // Filtra basado en la ubicación actual
+          filterProperties(searchController.text);
         } else {
-          filteredProperties = properties; // Si no hay filtro, muestra todas las propiedades
+          filteredProperties = properties;
         }
       });
     } catch (e) {
