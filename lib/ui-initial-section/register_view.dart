@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:renstatefrontend/shared/buttonApp.dart';
-//import 'package:renstatefrontend/shared/logo.dart';
+import 'package:app_mobile_plusroom/shared/buttonApp.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/login_view.dart';
 
 class RegisterView extends StatelessWidget {
@@ -14,10 +13,14 @@ class RegisterView extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       backgroundColor: Color(0xFF78BCC4),
       body: Center(
-        child: SingleChildScrollView( // Envuelve el contenido en SingleChildScrollView
+        child: SingleChildScrollView(
           child: Column(
             children: [
-              //logo(),
+              Image.asset(
+                'lib/assets/icon_logo.jpeg',
+                height: 100.0,
+                fit: BoxFit.contain,
+              ),
               Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Column(
@@ -34,13 +37,36 @@ class RegisterView extends StatelessWidget {
                         child: formRegister(),
                       ),
                     ),
+                    SizedBox(height: 10), // Added space
+                    Text(
+                      'Al registrarte, aceptas nuestras Condiciones de uso y Politicas de privacidad',
+                      style: TextStyle(
+                        color: Color(0xFF454040),
+                        fontSize: 14,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                     haveAccount(context),
-                    /*buttonApp(
-                        "Register",
-                        (){
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      child: TextButton(
+                        onPressed: () {
                           Navigator.pushNamed(context, LoginView.id);
-                        }
-                        )*/
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor: Color(0xFF427AA1),
+                          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                        ),
+                        child: Text(
+                          "Register",
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -52,8 +78,7 @@ class RegisterView extends StatelessWidget {
   }
 }
 
-
-Widget textRegister(){
+Widget textRegister() {
   return Text(
     'Register',
     style: TextStyle(
@@ -64,16 +89,18 @@ Widget textRegister(){
   );
 }
 
-Widget haveAccount(context){
+Widget haveAccount(context) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20.0),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("Have an account? ", style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-        ),
+        Text(
+          "Have an account? ",
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         GestureDetector(
           onTap: () {
@@ -96,7 +123,7 @@ Widget haveAccount(context){
   );
 }
 
-Widget formRegister(){
+Widget formRegister() {
   return Column(
     children: [
       TextField(

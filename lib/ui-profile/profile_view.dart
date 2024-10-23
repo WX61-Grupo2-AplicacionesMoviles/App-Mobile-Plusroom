@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 //import 'package:renstatefrontend/see-your-clients/ui/see_clients.dart';
 //import 'package:renstatefrontend/shared/appBarApp.dart';
 //import 'package:renstatefrontend/shared/bottomNavigationApp.dart';
-//import 'package:renstatefrontend/shared/buttonApp.dart';
-
+import 'package:app_mobile_plusroom/shared/buttonApp.dart';
 //import '../shared/showImageProfile.dart';
 
 class ProfileView extends StatelessWidget {
@@ -60,12 +59,12 @@ class ProfileView extends StatelessWidget {
                     SizedBox(height: 20.0,),
                     FractionallySizedBox(
                       widthFactor: 0.5,
-                      /*child: buttonApp(
+                      child: buttonApp(
                           "Save",
                               (){
 
                           }
-                      ),*/
+                      ),
                     ),
                     SizedBox(height: 5,),
                     FractionallySizedBox(

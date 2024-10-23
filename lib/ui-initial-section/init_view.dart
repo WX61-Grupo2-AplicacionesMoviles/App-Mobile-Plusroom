@@ -46,17 +46,29 @@ class InitView extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            buildStyledButton(
-              "Login",
-                  () {
-                Navigator.pushNamed(context, LoginView.id);
-              },
+            SizedBox(
+              width: 150, // Set a fixed width for both buttons
+              child: buildStyledButton(
+                "LOG IN",
+                    () {
+                  Navigator.pushNamed(context, LoginView.id);
+                },
+                Colors.white,
+                Colors.black,
+                Color(0xFF427AA1),
+              ),
             ),
-            buildStyledButton(
-              "Register",
-                  () {
-                Navigator.pushNamed(context, RegisterView.id);
-              },
+            SizedBox(
+              width: 150, // Set a fixed width for both buttons
+              child: buildStyledButton(
+                "REGISTER",
+                    () {
+                  Navigator.pushNamed(context, RegisterView.id);
+                },
+                Color(0xFF427AA1),
+                Color(0xFF427AA1),
+                Colors.white,
+              ),
             ),
           ],
         ),
@@ -68,6 +80,9 @@ class InitView extends StatelessWidget {
 ElevatedButton buildStyledButton(
     String label,
     Function onPressed,
+    Color backgroundColor,
+    Color borderColor,
+    Color textColor,
     ) {
   return ElevatedButton(
     onPressed: () {
@@ -77,14 +92,16 @@ ElevatedButton buildStyledButton(
       label,
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        fontSize: 18.0,
+        fontSize: 14.0, // Adjusted font size
+        color: textColor,
       ),
     ),
     style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.lightBlue,
+      backgroundColor: backgroundColor,
+      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5),
-        side: BorderSide(color: Colors.black, width: 1),
+        side: BorderSide(color: borderColor, width: 1),
       ),
     ),
   );

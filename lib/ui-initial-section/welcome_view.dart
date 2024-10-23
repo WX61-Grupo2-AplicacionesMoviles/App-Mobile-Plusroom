@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 //import 'package:renstatefrontend/shared/bottomNavigationApp.dart';
-//import 'package:renstatefrontend/shared/buttonApp.dart';
+import 'package:app_mobile_plusroom/shared/buttonApp.dart';
 //import 'package:renstatefrontend/shared/logo.dart';
 import 'package:app_mobile_plusroom/ui-profile/profile_view.dart';
 
@@ -40,12 +40,12 @@ class WelcomeView extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 20.0), // Espacio vertical entre el Card y el botón
-                  /*buttonApp(
+                  buttonApp(
                     "Profile",
                         () {
                       Navigator.pushNamed(context, ProfileView.id);
                     },
-                  ),*/
+                  ),
                 ],
               ),
             ),

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //import 'package:renstatefrontend/shared/appBarApp.dart';
 //import 'package:renstatefrontend/shared/bottomNavigationApp.dart';
-//import 'package:renstatefrontend/shared/buttonApp.dart';
+import 'package:app_mobile_plusroom/shared/buttonApp.dart';
 //import 'package:renstatefrontend/shared/showImageProfile.dart';
 //import 'package:renstatefrontend/ui-mesagge/receivedMessages.dart';
 
