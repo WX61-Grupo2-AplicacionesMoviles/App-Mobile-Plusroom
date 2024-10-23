@@ -31,7 +31,11 @@ class _PropertiesPageState extends State<PropertiesPage> {
       final List<Post> posts = await _postService.getPosts();
       setState(() {
         properties = posts;
-        filteredProperties = properties;
+        if (selectedCategory != null) {
+          filterProperties(searchController.text); // Filtra basado en la ubicación actual
+        } else {
+          filteredProperties = properties; // Si no hay filtro, muestra todas las propiedades
+        }
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
