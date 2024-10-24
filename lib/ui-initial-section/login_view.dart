@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:app_mobile_plusroom/shared/buttonApp.dart';
 //import 'package:renstatefrontend/shared/logo.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/register_view.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/welcome_view.dart';
@@ -13,7 +12,7 @@ class LoginView extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color(0xFF78BCC4),
+      backgroundColor: const Color(0xFF78BCC4),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -25,7 +24,7 @@ class LoginView extends StatelessWidget {
                 fit: BoxFit.contain,
               ),
               textLogin(),
-              SizedBox(
+              const SizedBox(
                 height: 15.0,
               ),
               Card(
@@ -44,17 +43,17 @@ class LoginView extends StatelessWidget {
                 ),
               ),
               notHaveAccount(context),
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width * 0.6,
                 child: TextButton(
                   onPressed: () {
                     Navigator.pushNamed(context, WelcomeView.id);
                   },
                   style: TextButton.styleFrom(
-                    backgroundColor: Color(0xFF427AA1),
-                    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                    backgroundColor: const Color(0xFF427AA1),
+                    padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   ),
-                  child: Text(
+                  child: const Text(
                     "Log In",
                     style: TextStyle(
                       fontSize: 18.0,
@@ -79,7 +78,7 @@ Widget notHaveAccount(context) {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
+        const Text(
           "You do not have an account? ",
           style: TextStyle(
             fontSize: 15,
@@ -90,10 +89,10 @@ Widget notHaveAccount(context) {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => RegisterView()),
+              MaterialPageRoute(builder: (context) => const RegisterView()),
             );
           },
-          child: Text(
+          child: const Text(
             'Sign up',
             style: TextStyle(
               fontSize: 15,
@@ -108,7 +107,7 @@ Widget notHaveAccount(context) {
 }
 
 Widget textLogin() {
-  return Text(
+  return const Text(
     'Log In',
     style: TextStyle(
       fontSize: 40.0,
@@ -122,7 +121,7 @@ Widget emailInput() {
   return Container(
     child: TextField(
       keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         labelText: 'Email',
         labelStyle: TextStyle(
           color: Color.fromARGB(255, 10, 9, 9),
@@ -139,7 +138,7 @@ Widget passwordInput() {
     child: TextField(
       keyboardType: TextInputType.emailAddress,
       obscureText: true,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         labelText: 'Password',
         labelStyle: TextStyle(
           color: Color.fromARGB(255, 12, 11, 11),

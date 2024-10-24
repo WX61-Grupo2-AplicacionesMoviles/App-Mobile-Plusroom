@@ -1,3 +1,4 @@
+import 'package:app_mobile_plusroom/router/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/shared/buttonApp.dart';
 import 'package:app_mobile_plusroom/ui-profile/profile_view.dart';
@@ -25,7 +26,7 @@ class WelcomeView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -39,13 +40,13 @@ class WelcomeView extends StatelessWidget {
                           child: Column(
                             children: [
                               tittleWelcome(),
-                              SizedBox(height: 15.0),
+                              const SizedBox(height: 15.0),
                               textWelcome(),
                             ],
                           ),
                         ),
                       ),
-                      SizedBox(height: 20.0),
+                      const SizedBox(height: 20.0),
                       buttonApp(
                         "See my profile",
                             () {
@@ -56,6 +57,7 @@ class WelcomeView extends StatelessWidget {
                   ),
                 ),
               ],
+
             ),
           ),
         ],
@@ -65,7 +67,7 @@ class WelcomeView extends StatelessWidget {
 }
 
 Widget tittleWelcome() {
-  return Text(
+  return const Text(
     'WELCOME',
     style: TextStyle(
       fontSize: 25.0,
@@ -76,7 +78,7 @@ Widget tittleWelcome() {
 }
 
 Widget textWelcome() {
-  return Center(
+  return const Center(
     child: Text(
       'To complete your registration, we recommend that you complete your information to improve your profile',
       style: TextStyle(

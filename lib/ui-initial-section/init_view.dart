@@ -11,15 +11,15 @@ class InitView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color(0xFF064789),
+      backgroundColor: const Color(0xFF064789),
       body: Center(
-        child: Container(
+        child: SizedBox(
           width: double.infinity,
           height: 280,
           child: Stack(
             alignment: Alignment.center,
             children: [
-              Positioned(
+              const Positioned(
                 top: 20,
                 child: Text(
                   'Welcome to',
@@ -56,7 +56,7 @@ class InitView extends StatelessWidget {
                 },
                 Colors.white,
                 Colors.black,
-                Color(0xFF427AA1),
+                const Color(0xFF427AA1),
               ),
             ),
             SizedBox(
@@ -66,8 +66,8 @@ class InitView extends StatelessWidget {
                     () {
                   showRegisterDialog(context);
                 },
-                Color(0xFF427AA1),
-                Color(0xFF427AA1),
+                const Color(0xFF427AA1),
+                const Color(0xFF427AA1),
                 Colors.white,
               ),
             ),
@@ -85,14 +85,14 @@ class InitView extends StatelessWidget {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
+              const Text(
                 'Elige tu cuenta',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -110,17 +110,17 @@ class InitView extends StatelessWidget {
                           width: 100,
                           height: 100,
                         ),
-                        SizedBox(height: 10),
-                        Text('Arrendatario'),
+                        const SizedBox(height: 10),
+                        const Text('Arrendatario'),
                       ],
                     ),
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => RegisterView()),
+                        MaterialPageRoute(builder: (context) => const RegisterView()),
                       );
                     },
                     child: Column(
@@ -130,8 +130,8 @@ class InitView extends StatelessWidget {
                           width: 100,
                           height: 100,
                         ),
-                        SizedBox(height: 10),
-                        Text('Arrendador'),
+                        const SizedBox(height: 10),
+                        const Text('Arrendador'),
                       ],
                     ),
                   ),
@@ -156,20 +156,20 @@ ElevatedButton buildStyledButton(
     onPressed: () {
       onPressed();
     },
+    style: ElevatedButton.styleFrom(
+      backgroundColor: backgroundColor,
+      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
+        side: BorderSide(color: borderColor, width: 1),
+      ),
+    ),
     child: Text(
       label,
       style: TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 14.0, // Adjusted font size
         color: textColor,
-      ),
-    ),
-    style: ElevatedButton.styleFrom(
-      backgroundColor: backgroundColor,
-      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
-        side: BorderSide(color: borderColor, width: 1),
       ),
     ),
   );

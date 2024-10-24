@@ -15,8 +15,8 @@ class ProfileOwner extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
+            const Padding(
+              padding: EdgeInsets.only(top: 20.0),
               child: Column(
                 children: [
                   CircleAvatar(
@@ -36,10 +36,10 @@ class ProfileOwner extends StatelessWidget {
                 ],
               ),
             ),
-            Column(
+            const Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 5.0),
+                  padding: EdgeInsets.only(top: 5.0),
                 ),
                 Text(
                   'Rafael Lopez Perez',
@@ -52,7 +52,7 @@ class ProfileOwner extends StatelessWidget {
               ],
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 15.0),
+              padding: const EdgeInsets.symmetric(vertical: 15.0),
               child: FractionallySizedBox(
                 widthFactor: 0.9,
                 child: Column(
@@ -71,7 +71,7 @@ class ProfileOwner extends StatelessWidget {
                     cardInfo(context, "987654321"),
                     cardInfo(context, "Here is description about of user"),
                     Container(
-                      margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                      margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
                       child: FractionallySizedBox(
                         widthFactor: 0.5,
                         child: buttonApp(
@@ -80,12 +80,12 @@ class ProfileOwner extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 5),
-                    FractionallySizedBox(
+                    const SizedBox(height: 5),
+                    const FractionallySizedBox(
                       widthFactor: 0.5,
                     ),
-                    SizedBox(height: 5),
-                    FractionallySizedBox(
+                    const SizedBox(height: 5),
+                    const FractionallySizedBox(
                       widthFactor: 0.5,
                     ),
                   ],
@@ -103,7 +103,7 @@ Widget cardInfo(context, String info) {
   final size = MediaQuery.of(context).size;
 
   return Card(
-    color: Color(0xFFD9D9D9),
+    color: const Color(0xFFD9D9D9),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8.0),
     ),
@@ -115,7 +115,7 @@ Widget cardInfo(context, String info) {
       child: Center(
         child: Text(
           info,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.bold,
             color: Color.fromARGB(255, 12, 11, 11),

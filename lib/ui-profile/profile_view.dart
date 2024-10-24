@@ -16,8 +16,8 @@ class ProfileView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
+            const Padding(
+              padding: EdgeInsets.only(top: 20.0),
               child: Column(
                 children: [
                   CircleAvatar(
@@ -37,10 +37,10 @@ class ProfileView extends StatelessWidget {
                 ],
               ),
             ),
-            Column(
+            const Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 5.0),
+                  padding: EdgeInsets.only(top: 5.0),
                 ),
                 Text(
                   'Rafael Lopez Perez',
@@ -53,7 +53,7 @@ class ProfileView extends StatelessWidget {
               ],
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 15.0),
+              padding: const EdgeInsets.symmetric(vertical: 15.0),
               child: FractionallySizedBox(
                 widthFactor: 0.9,
                 child: Column(
@@ -71,11 +71,11 @@ class ProfileView extends StatelessWidget {
                     cardInfo(context, "rafael@gmail.com"),
                     cardInfo(context, "987654321"),
                     cardInfo(context, "Here is description about of user"),
-                    SizedBox(height: 20.0),
+                    const SizedBox(height: 20.0),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Container(
-                        margin: EdgeInsets.only(top: 10.0, bottom: 50.0),
+                        margin: const EdgeInsets.only(top: 10.0, bottom: 50.0),
                         child: Row(
                           children: [
                             Image.asset(
@@ -83,8 +83,8 @@ class ProfileView extends StatelessWidget {
                               width: 24,
                               height: 24,
                             ),
-                            SizedBox(width: 8.0),
-                            Text(
+                            const SizedBox(width: 8.0),
+                            const Text(
                               'Con mascotas',
                               style: TextStyle(
                                 fontSize: 16,
@@ -97,7 +97,7 @@ class ProfileView extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(bottom: 20.0),
+                      margin: const EdgeInsets.only(bottom: 20.0),
                       child: FractionallySizedBox(
                         widthFactor: 0.5,
                         child: buttonApp(
@@ -106,19 +106,19 @@ class ProfileView extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => EditProfileRoomie(),
+                                builder: (context) => const EditProfileRoomie(),
                               ),
                             );
                           },
                         ),
                       ),
                     ),
-                    SizedBox(height: 5),
-                    FractionallySizedBox(
+                    const SizedBox(height: 5),
+                    const FractionallySizedBox(
                       widthFactor: 0.5,
                     ),
-                    SizedBox(height: 5),
-                    FractionallySizedBox(
+                    const SizedBox(height: 5),
+                    const FractionallySizedBox(
                       widthFactor: 0.5,
                     ),
                   ],
@@ -136,7 +136,7 @@ Widget cardInfo(context, String info) {
   final size = MediaQuery.of(context).size;
 
   return Card(
-    color: Color(0xFFD9D9D9),
+    color: const Color(0xFFD9D9D9),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8.0),
     ),
@@ -148,7 +148,7 @@ Widget cardInfo(context, String info) {
       child: Center(
         child: Text(
           info,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.bold,
             color: Color.fromARGB(255, 12, 11, 11),

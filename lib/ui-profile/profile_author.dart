@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //import 'package:renstatefrontend/shared/appBarApp.dart';
 //import 'package:renstatefrontend/shared/bottomNavigationApp.dart';
-import 'package:app_mobile_plusroom/shared/buttonApp.dart';
 //import 'package:renstatefrontend/shared/showImageProfile.dart';
 //import 'package:renstatefrontend/ui-mesagge/receivedMessages.dart';
 
@@ -26,8 +24,8 @@ class _ProfileAuthorState extends State<ProfileAuthor> {
           children: [
             //showImageProfile(),
             showStars(selectedStar),
-            SizedBox(height: 25.0),
-            FractionallySizedBox(
+            const SizedBox(height: 25.0),
+            const FractionallySizedBox(
               widthFactor: 0.7,
               /*child: buttonApp("Send Message",
                       (){
@@ -37,9 +35,9 @@ class _ProfileAuthorState extends State<ProfileAuthor> {
                     );
                   }),*/
             ),
-            SizedBox(height: 25.0,),
+            const SizedBox(height: 25.0,),
             showInfoProfile(),
-            SizedBox(height: 30.0,),
+            const SizedBox(height: 30.0,),
             rateSection(),
           ],
         )
@@ -53,7 +51,7 @@ class _ProfileAuthorState extends State<ProfileAuthor> {
       widthFactor: 0.8,
       child: Column(
         children: [
-          Text(
+          const Text(
             "Rate this user",
             style: TextStyle(
               color: Colors.black,
@@ -109,12 +107,12 @@ Widget showStars(int rank) {
 }
 
 Widget showInfoProfile(){
-  return FractionallySizedBox(
+  return const FractionallySizedBox(
     widthFactor: 0.8,
     child: Card(
       color: Color(0xFF002C3E),
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: EdgeInsets.all(20.0),
         child: Column(
           children: [
             Text("Rafael Lopez Reyes",

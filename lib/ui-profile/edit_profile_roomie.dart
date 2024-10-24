@@ -28,8 +28,8 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
+                const Padding(
+                  padding: EdgeInsets.only(top: 20.0),
                   child: Column(
                     children: [
                       CircleAvatar(
@@ -49,10 +49,10 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                     ],
                   ),
                 ),
-                Column(
+                const Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
+                      padding: EdgeInsets.only(top: 5.0),
                     ),
                     Text(
                       'Rafael Lopez Perez',
@@ -65,7 +65,7 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 15.0),
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
                   child: FractionallySizedBox(
                     widthFactor: 0.9,
                     child: Column(
@@ -84,10 +84,10 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                         cardInfo(context, "987654321"),
                         cardInfo(context, "Here is description about of user"),
                         cardInfo(context, "Location"), // New Location field
-                        SizedBox(height: 20.0),
+                        const SizedBox(height: 20.0),
                         Row(
                           children: [
-                            Text(
+                            const Text(
                               '¿Buscas roomies?',
                               style: TextStyle(
                                 fontSize: 16,
@@ -107,7 +107,7 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                         ),
                         Container(
                           width: double.infinity,
-                          padding: EdgeInsets.symmetric(horizontal: 16.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(8.0),
@@ -115,7 +115,7 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                           child: DropdownButton<String>(
                             value: _selectedOccupation,
                             isExpanded: true,
-                            underline: SizedBox(),
+                            underline: const SizedBox(),
                             items: <String>['Select Occupation', 'Student', 'Professional', 'Other']
                                 .map((String value) {
                               return DropdownMenuItem<String>(
@@ -133,7 +133,7 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                            margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                            margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
                             child: Row(
                               children: [
                                 Image.asset(
@@ -141,8 +141,8 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                                   width: 24,
                                   height: 24,
                                 ),
-                                SizedBox(width: 8.0),
-                                Text(
+                                const SizedBox(width: 8.0),
+                                const Text(
                                   '¿Tienes mascotas?',
                                   style: TextStyle(
                                     fontSize: 16,
@@ -165,7 +165,7 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                            margin: EdgeInsets.only(bottom: 50.0),
+                            margin: const EdgeInsets.only(bottom: 50.0),
                             child: Row(
                               children: [
                                 Image.asset(
@@ -173,8 +173,8 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                                   width: 50,  // Increased size
                                   height: 50, // Increased size
                                 ),
-                                SizedBox(width: 8.0),
-                                Text(
+                                const SizedBox(width: 8.0),
+                                const Text(
                                   '¿Fumas?',
                                   style: TextStyle(
                                     fontSize: 16,
@@ -195,7 +195,7 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(bottom: 20.0),
+                          margin: const EdgeInsets.only(bottom: 20.0),
                           child: FractionallySizedBox(
                             widthFactor: 0.5,
                             child: buttonApp(
@@ -204,12 +204,12 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 5),
-                        FractionallySizedBox(
+                        const SizedBox(height: 5),
+                        const FractionallySizedBox(
                           widthFactor: 0.5,
                         ),
-                        SizedBox(height: 5),
-                        FractionallySizedBox(
+                        const SizedBox(height: 5),
+                        const FractionallySizedBox(
                           widthFactor: 0.5,
                         ),
                       ],
@@ -229,7 +229,7 @@ Widget cardInfo(context, String info) {
   final size = MediaQuery.of(context).size;
 
   return Card(
-    color: Color(0xFFD9D9D9),
+    color: const Color(0xFFD9D9D9),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8.0),
     ),
@@ -241,7 +241,7 @@ Widget cardInfo(context, String info) {
       child: Center(
         child: Text(
           info,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.bold,
             color: Color.fromARGB(255, 12, 11, 11),
