@@ -4,19 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/ui-profile/profile_view.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/welcome_view.dart';
 
-
-
 class BottomNavBar extends StatefulWidget {
-  final int initialIndex; // Nuevo parámetro para el índice inicial
-
-  const BottomNavBar({super.key, required this.initialIndex});
+  static String id = 'nav_bar';
+  const BottomNavBar({super.key});
 
   @override
   _BottomNavBarState createState() => _BottomNavBarState();
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
-  late int _currentIndex;
+  int _currentIndex = 0; // Inicializa en 0 por defecto
 
   final List<Widget> _pages = [
     const WelcomeView(),
@@ -25,13 +22,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
     const MessagesPage(),
     const ProfileView(),
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    // Inicializa _currentIndex con el valor de initialIndex recibido del widget
-    _currentIndex = widget.initialIndex;
-  }
 
   void _onTap(int index) {
     setState(() {

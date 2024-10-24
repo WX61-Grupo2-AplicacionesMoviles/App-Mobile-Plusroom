@@ -1,7 +1,7 @@
+import 'package:app_mobile_plusroom/router/routes.dart';
 import 'package:flutter/material.dart';
-//import 'package:renstatefrontend/shared/logo.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/register_view.dart';
-import 'package:app_mobile_plusroom/ui-initial-section/welcome_view.dart';
+
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -47,7 +47,7 @@ class LoginView extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * 0.6,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, WelcomeView.id);
+                    Navigator.pushNamed(context, BottomNavBar.id);
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: const Color(0xFF427AA1),
