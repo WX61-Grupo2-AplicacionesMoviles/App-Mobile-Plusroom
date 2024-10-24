@@ -169,11 +169,7 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                             margin: const EdgeInsets.only(bottom: 50.0),
                             child: Row(
                               children: [
-                                Image.asset(
-                                  'lib/assets/icon_smoke.png',
-                                  width: 50,
-                                  height: 50,
-                                ),
+                                Icon(Icons.smoking_rooms),
                                 const SizedBox(width: 8.0),
                                 const Text(
                                   '¿Fumas?',

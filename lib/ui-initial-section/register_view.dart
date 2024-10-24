@@ -1,9 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/login_view.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class RegisterView extends StatelessWidget {
+Future<void> registerUser(Map<String, dynamic> userData) async {
+  final url = Uri.parse('https://giving-perception-production.up.railway.app/api/tenants/createTenant');
+  final response = await http.post(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(userData),
+  );
+
+  if (response.statusCode == 200) {
+    // Registro exitoso
+    print('Usuario registrado exitosamente');
+  } else {
+    // Fallo en el registro
+    print('Error al registrar usuario: ${response.statusCode}');
+    print('Cuerpo de la respuesta: ${response.body}');
+  }
+}
+
+class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
   static String id = 'register_view';
+
+  @override
+  _RegisterViewState createState() => _RegisterViewState();
+}
+
+class _RegisterViewState extends State<RegisterView> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +81,21 @@ class RegisterView extends StatelessWidget {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.6,
                       child: TextButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          Map<String, dynamic> userData = {
+                            'name': _nameController.text,
+                            'lastName': _lastNameController.text,
+                            'email': _emailController.text,
+                            'password': _passwordController.text,
+                            'description': '',
+                            'dni': '',
+                            'age': 0,
+                            'gender': '',
+                            'occupation': '',
+                            'searchRoomie': true,
+                            'photo': ''
+                          };
+                          await registerUser(userData);
                           Navigator.pushNamed(context, LoginView.id);
                         },
                         style: TextButton.styleFrom(
@@ -73,6 +119,64 @@ class RegisterView extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget formRegister() {
+    return Column(
+      children: [
+        TextField(
+          controller: _nameController,
+          keyboardType: TextInputType.name,
+          decoration: const InputDecoration(
+            labelText: 'Name',
+            labelStyle: TextStyle(
+              color: Color.fromARGB(255, 10, 9, 9),
+            ),
+          ),
+        ),
+        TextField(
+          controller: _lastNameController,
+          keyboardType: TextInputType.name,
+          decoration: const InputDecoration(
+            labelText: 'Last Name',
+            labelStyle: TextStyle(
+              color: Color.fromARGB(255, 10, 9, 9),
+            ),
+          ),
+        ),
+        TextField(
+          controller: _emailController,
+          keyboardType: TextInputType.emailAddress,
+          decoration: const InputDecoration(
+            labelText: 'Email',
+            labelStyle: TextStyle(
+              color: Color.fromARGB(255, 10, 9, 9),
+            ),
+          ),
+        ),
+        TextField(
+          controller: _passwordController,
+          keyboardType: TextInputType.visiblePassword,
+          obscureText: true,
+          decoration: const InputDecoration(
+            labelText: 'Password',
+            labelStyle: TextStyle(
+              color: Color.fromARGB(255, 12, 11, 11),
+            ),
+          ),
+        ),
+        TextField(
+          keyboardType: TextInputType.visiblePassword,
+          obscureText: true,
+          decoration: const InputDecoration(
+            labelText: 'Confirm password',
+            labelStyle: TextStyle(
+              color: Color.fromARGB(255, 12, 11, 11),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -119,64 +223,5 @@ Widget haveAccount(context) {
         ),
       ],
     ),
-  );
-}
-
-Widget formRegister() {
-  return Column(
-    children: [
-      TextField(
-        keyboardType: TextInputType.emailAddress,
-        decoration: const InputDecoration(
-          labelText: 'Name',
-          labelStyle: TextStyle(
-            color: Color.fromARGB(255, 10, 9, 9),
-          ),
-        ),
-        onChanged: (value) {},
-      ),
-      TextField(
-        keyboardType: TextInputType.emailAddress,
-        decoration: const InputDecoration(
-          labelText: 'Last Name',
-          labelStyle: TextStyle(
-            color: Color.fromARGB(255, 10, 9, 9),
-          ),
-        ),
-        onChanged: (value) {},
-      ),
-      TextField(
-        keyboardType: TextInputType.emailAddress,
-        decoration: const InputDecoration(
-          labelText: 'Email',
-          labelStyle: TextStyle(
-            color: Color.fromARGB(255, 10, 9, 9),
-          ),
-        ),
-        onChanged: (value) {},
-      ),
-      TextField(
-        keyboardType: TextInputType.emailAddress,
-        obscureText: true,
-        decoration: const InputDecoration(
-          labelText: 'Password',
-          labelStyle: TextStyle(
-            color: Color.fromARGB(255, 12, 11, 11),
-          ),
-        ),
-        onChanged: (value) {},
-      ),
-      TextField(
-        keyboardType: TextInputType.emailAddress,
-        obscureText: true,
-        decoration: const InputDecoration(
-          labelText: 'Confirm password',
-          labelStyle: TextStyle(
-            color: Color.fromARGB(255, 12, 11, 11),
-          ),
-        ),
-        onChanged: (value) {},
-      ),
-    ],
   );
 }
