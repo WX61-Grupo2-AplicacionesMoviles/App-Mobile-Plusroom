@@ -50,14 +50,18 @@ class WelcomeView extends StatelessWidget {
                       buttonApp(
                         "See my profile",
                             () {
-                          Navigator.pushNamed(context, ProfileView.id);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const BottomNavBar(initialIndex: 4),
+                            ),
+                          );
                         },
                       ),
                     ],
                   ),
                 ),
               ],
-
             ),
           ),
         ],

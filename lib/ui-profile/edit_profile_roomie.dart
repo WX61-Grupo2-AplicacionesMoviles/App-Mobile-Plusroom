@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/shared/buttonApp.dart';
-import 'package:app_mobile_plusroom/ui-profile/profile_view.dart';
+import 'package:app_mobile_plusroom/router/routes.dart';
 
 class EditProfileRoomie extends StatefulWidget {
   const EditProfileRoomie({super.key});
@@ -25,7 +25,7 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.only(top: 40.0), // Added top padding
+            padding: const EdgeInsets.only(top: 40.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -84,7 +84,7 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                         cardInfo(context, "rafael@gmail.com"),
                         cardInfo(context, "987654321"),
                         cardInfo(context, "Here is description about of user"),
-                        cardInfo(context, "Location"), // New Location field
+                        cardInfo(context, "Location"),
                         const SizedBox(height: 20.0),
                         Row(
                           children: [
@@ -171,8 +171,8 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                               children: [
                                 Image.asset(
                                   'lib/assets/icon_smoke.png',
-                                  width: 50,  // Increased size
-                                  height: 50, // Increased size
+                                  width: 50,
+                                  height: 50,
                                 ),
                                 const SizedBox(width: 8.0),
                                 const Text(
@@ -202,7 +202,12 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                             child: buttonApp(
                               "Save",
                                   () {
-                                Navigator.pushReplacementNamed(context, ProfileView.id);
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const BottomNavBar(initialIndex: 4),
+                                  ),
+                                );
                               },
                             ),
                           ),
