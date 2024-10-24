@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/shared/buttonApp.dart';
+import 'package:app_mobile_plusroom/ui-profile/profile_view.dart';
 
 class EditProfileRoomie extends StatefulWidget {
   const EditProfileRoomie({super.key});
@@ -200,7 +201,9 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                             widthFactor: 0.5,
                             child: buttonApp(
                               "Save",
-                                  () {},
+                                  () {
+                                Navigator.pushReplacementNamed(context, ProfileView.id);
+                              },
                             ),
                           ),
                         ),
