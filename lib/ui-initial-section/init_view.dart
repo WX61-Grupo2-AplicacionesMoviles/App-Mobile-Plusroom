@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/register_view.dart';
+import 'package:app_mobile_plusroom/ui-initial-section/register_view_landlord.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/login_view.dart';
 
 class InitView extends StatelessWidget {
@@ -63,7 +64,7 @@ class InitView extends StatelessWidget {
               child: buildStyledButton(
                 "REGISTER",
                     () {
-                  Navigator.pushNamed(context, RegisterView.id);
+                  showRegisterDialog(context);
                 },
                 Color(0xFF427AA1),
                 Color(0xFF427AA1),
@@ -73,6 +74,73 @@ class InitView extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void showRegisterDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Elige tu cuenta',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RegisterViewLandlord()),
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          'lib/assets/landlord.jpeg',
+                          width: 100,
+                          height: 100,
+                        ),
+                        SizedBox(height: 10),
+                        Text('Arrendatario'),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RegisterView()),
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          'lib/assets/tenant.jpeg',
+                          width: 100,
+                          height: 100,
+                        ),
+                        SizedBox(height: 10),
+                        Text('Arrendador'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
