@@ -1,5 +1,6 @@
 import 'package:app_mobile_plusroom/router/customRoutes.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/init_view.dart';
+import 'package:app_mobile_plusroom/pages/roomie_search_page.dart';
 import 'package:flutter/material.dart';
 
 
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: InitView.id,
       routes: customRoutes,
-
+      //home: RoomieSearch()
     );
   }
 }
