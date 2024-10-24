@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/shared/buttonApp.dart';
-import 'package:app_mobile_plusroom/ui-profile/edit_profile_roomie.dart';
 
-class ProfileView extends StatelessWidget {
-  const ProfileView({super.key});
-  static String id = 'profile_view';
+class ProfileOwner extends StatelessWidget {
+  const ProfileOwner({super.key});
+  static String id = 'profile_owner';
 
   @override
   Widget build(BuildContext context) {
@@ -71,45 +70,13 @@ class ProfileView extends StatelessWidget {
                     cardInfo(context, "rafael@gmail.com"),
                     cardInfo(context, "987654321"),
                     cardInfo(context, "Here is description about of user"),
-                    SizedBox(height: 20.0),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        margin: EdgeInsets.only(top: 10.0, bottom: 50.0),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'lib/assets/icon_pets.png',
-                              width: 24,
-                              height: 24,
-                            ),
-                            SizedBox(width: 8.0),
-                            Text(
-                              'Con mascotas',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                     Container(
-                      margin: EdgeInsets.only(bottom: 20.0),
+                      margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
                       child: FractionallySizedBox(
                         widthFactor: 0.5,
                         child: buttonApp(
                           "Editar Perfil",
-                              () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditProfileRoomie(),
-                              ),
-                            );
-                          },
+                              () {},
                         ),
                       ),
                     ),
