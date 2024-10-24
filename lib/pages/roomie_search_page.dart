@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'package:app_mobile_plusroom/components/filter_roomie_button.dart';
 import 'package:app_mobile_plusroom/components/roomie_tile.dart';
 import 'package:app_mobile_plusroom/services/roomie_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../models/roomie.dart';
 
 class RoomieSearch extends StatefulWidget {
@@ -13,6 +15,7 @@ class _RoomieSearchState extends State<RoomieSearch> {
 
   bool showSectionRoomies = false;
 
+  final TextEditingController _searchController = TextEditingController();
   final RoomieService _roomieService = RoomieService();
 
   // selected filters
@@ -22,8 +25,8 @@ class _RoomieSearchState extends State<RoomieSearch> {
   bool filterNonSmoker = false;
 
   // roomie info storage
-  List<Roomie> allRoomies = [];
-  List<Roomie> filteredRoomies = [];
+  List<Tenant> allRoomies = [];
+  List<Tenant> filteredRoomies = [];
 
   // set show section state
   void _setShowSectionRoomies() {
@@ -34,7 +37,7 @@ class _RoomieSearchState extends State<RoomieSearch> {
 
   Future<void> _fetchRoomies() async {
     try {
-      List<Roomie> roomies = await _roomieService.getRoomies();
+      List<Tenant> roomies = await _roomieService.getRoomies();
       setState(() {
         allRoomies = roomies;
         filteredRoomies = roomies;
@@ -44,17 +47,35 @@ class _RoomieSearchState extends State<RoomieSearch> {
     }
   }
 
-  // Filtrar roomies en base a los filtros seleccionados
+  // search roomie by location
+  void search() {
+    final search = _searchController.text;
+    if (search.isNotEmpty) {
+      setState(() {
+        filteredRoomies = allRoomies
+            .where((roomie) => roomie.preferences.locationPreference
+            .toLowerCase()
+            .contains(search.toLowerCase()))
+            .toList();
+      });
+    } else {
+      setState(() {
+        filteredRoomies = allRoomies;
+      });
+    }
+  }
+
+  // filter controller
   void _applyFilters() {
     setState(() {
       filteredRoomies = allRoomies.where((roomie) {
         // check if roomie matches filters
         bool matchesStudent =
-            !filterStudent || roomie.occupation == "Estudiante";
+            !filterStudent || roomie.occupation == "Student";
         bool matchesProfessional =
-            !filterProfessional || roomie.occupation == "Profesional";
-        bool matchesPets = !filterPets || roomie.pets == true;
-        bool matchesNonSmoker = !filterNonSmoker || roomie.smoker == false;
+            !filterProfessional || roomie.occupation != "Student";
+        bool matchesPets = !filterPets || roomie.preferences.petFriendly == true;
+        bool matchesNonSmoker = !filterNonSmoker || roomie.preferences.smokingPreference == false;
 
         return matchesStudent &&
             matchesProfessional &&
@@ -67,7 +88,8 @@ class _RoomieSearchState extends State<RoomieSearch> {
   @override
   void initState() {
     super.initState();
-    _fetchRoomies();
+    // _fetchRoomies();
+    _getRoomieJsonData();
   }
 
   @override
@@ -87,6 +109,9 @@ class _RoomieSearchState extends State<RoomieSearch> {
       body: Column(
         children: [
 
+          // search bar
+          searchBar(),
+
           // show roomies section
           TextButton(
             onPressed: () {
@@ -105,9 +130,52 @@ class _RoomieSearchState extends State<RoomieSearch> {
           // roomies list
           showSectionRoomies ?
           Expanded(
-            child: _buildRoomieList(),
-          ) : Container(),
+                  child: filteredRoomies.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: filteredRoomies.length,
+                          itemBuilder: (context, index) {
+                            final roomie = filteredRoomies[index];
+                            return RoomieTile(roomie: roomie);
+                          },
+                        )
+                      : const Center(
+                          // child: CircularProgressIndicator(),
+                          child: Text("No roomies available"),
+                        ),
+                )
+              : Container(),
         ],
+      ),
+    );
+  }
+
+  Widget searchBar() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+          color: Colors.grey[200],
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _searchController,
+                decoration: const InputDecoration(
+                  hintText: 'Enter a location',
+                  hintStyle: TextStyle(color: Color(0xFF064789)),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.all(10.0),
+                ),
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.search, color: Color(0xFF064789)),
+              onPressed: search,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -125,15 +193,15 @@ class _RoomieSearchState extends State<RoomieSearch> {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           // No data
-          return const Center(child: Text('No roomies disponibles'));
+          return const Center(child: Text('No roomies available'));
         } else {
 
-          // Mostrar la lista de roomies
-          List<Roomie> roomies = snapshot.data!;
+          // show roomies list
+          List<Tenant> roomies = snapshot.data!;
           return ListView.builder(
               itemCount: filteredRoomies.length,
               itemBuilder: (context, index) {
-                final Roomie roomie = filteredRoomies[index];
+                final Tenant roomie = filteredRoomies[index];
                 return RoomieTile(roomie: roomie);
               });
         }
@@ -151,11 +219,11 @@ class _RoomieSearchState extends State<RoomieSearch> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               FilterRoomieButton(
-                text: "Estudiante",
+                text: "Student",
                 onPressed: () {
                   setState(() {
                     // If already selected, deselect it
-                    // If not selected, select "Estudiante" and deselect "Profesional"
+                    // If not selected, select "Student" and deselect "Professional"
                     if (filterStudent) {
                       filterStudent = false;
                     } else {
@@ -168,11 +236,11 @@ class _RoomieSearchState extends State<RoomieSearch> {
                 isSelected: filterStudent,
               ),
               FilterRoomieButton(
-                text: "Profesional",
+                text: "Professional",
                 onPressed: () {
                   setState(() {
                     // If already selected, deselect it
-                    // If not selected, select "Profesional" and deselect "Estudiante"
+                    // If not selected, select "Professional" and deselect "Student"
                     if (filterProfessional) {
                       filterProfessional = false;
                     } else {
@@ -185,7 +253,7 @@ class _RoomieSearchState extends State<RoomieSearch> {
                 isSelected: filterProfessional,
               ),
               FilterRoomieButton(
-                text: "Mascotas",
+                text: "Pet friendly",
                 onPressed: () {
                   setState(() {
                     filterPets = !filterPets;
@@ -195,7 +263,7 @@ class _RoomieSearchState extends State<RoomieSearch> {
                 isSelected: filterPets,
               ),
               FilterRoomieButton(
-                text: "No fumador",
+                text: "No smoker",
                 onPressed: () {
                   setState(() {
                     filterNonSmoker = !filterNonSmoker;
@@ -209,5 +277,19 @@ class _RoomieSearchState extends State<RoomieSearch> {
         ),
       ],
     );
+  }
+
+  // obtain data by json
+  Future<void> _getRoomieJsonData() async {
+    final String response = await rootBundle.loadString('lib/assets/db.json');
+    print("Response: $response");
+    final data = await json.decode(response);
+
+    setState(() {
+      allRoomies = (data['tenants'] as List<dynamic>)
+          .map((roomieData) => Tenant.fromJson(roomieData))
+          .toList();
+      filteredRoomies = allRoomies;
+    });
   }
 }

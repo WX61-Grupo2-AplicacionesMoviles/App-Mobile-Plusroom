@@ -9,14 +9,14 @@ class RoomieService {
 
 
   // get all roomies
-  Future<List<Roomie>> getRoomies() async {
+  Future<List<Tenant>> getRoomies() async {
     final response = await http.get(Uri.parse("$apiUrl/tenants"));
 
     if (response.statusCode == 200) {
       List<dynamic> jsonData = json.decode(response.body);
-      return jsonData.map((data) => Roomie.fromMap(data)).toList();
+      return jsonData.map((roomie) => Tenant.fromJson(roomie)).toList();
     } else {
-      throw Exception('Error al obtener los roomies');
+      throw Exception('Error to get roomies data');
     }
   }
 

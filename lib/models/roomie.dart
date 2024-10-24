@@ -1,41 +1,77 @@
-class Roomie {
+class Preferences {
+  final List<String> preferences;
+  final List<String> hobbies;
+  final String locationPreference;
+  final int budget;
+  final String genderPreference;
+  final int minAge;
+  final int maxAge;
+  final bool petFriendly;
+  final bool smokingPreference;
+  final String cleaningHabits;
+  final String sleepingHabits;
+
+  Preferences({
+    required this.preferences,
+    required this.hobbies,
+    required this.locationPreference,
+    required this.budget,
+    required this.genderPreference,
+    required this.minAge,
+    required this.maxAge,
+    required this.petFriendly,
+    required this.smokingPreference,
+    required this.cleaningHabits,
+    required this.sleepingHabits,
+  });
+
+  factory Preferences.fromJson(Map<String, dynamic> map) {
+    return Preferences(
+      preferences: List<String>.from(map['preferences']),
+      hobbies: List<String>.from(map['hobbies']),
+      locationPreference: map['locationPreference'],
+      budget: map['budget'],
+      genderPreference: map['genderPreference'],
+      minAge: map['minAge'],
+      maxAge: map['maxAge'],
+      petFriendly: map['petFriendly'],
+      smokingPreference: map['smokingPreference'],
+      cleaningHabits: map['cleaningHabits'],
+      sleepingHabits: map['sleepingHabits'],
+    );
+  }
+}
+
+class Tenant {
+  final int id;
   final String name;
   final String lastName;
   final String email;
-  final String? description;
+  final String description;
   final String dni;
   final int age;
   final String gender;
-  final String occupation; // student, professional
-  final bool? pets;
-  final bool? smoker;
+  final String occupation;
   final String photo;
-  // final bool searchRoomie;
-  // final String? receivedMessages, sentMesages; // Message model
-  // final String? listNotification; // Notification model
+  final Preferences preferences;
 
-  Roomie({
+  Tenant({
+    required this.id,
     required this.name,
     required this.lastName,
     required this.email,
-    // if description empty, show "No description"
-    this.description = "No description",
+    required this.description,
     required this.dni,
     required this.age,
     required this.gender,
     required this.occupation,
-    this.pets,
-    this.smoker,
     required this.photo,
-    // required this.searchRoomie,
-    // this.receivedMessages,
-    // this.sentMesages,
-    // this.listNotification
+    required this.preferences,
   });
 
-  // method to map data from json to Roomie object
-  factory Roomie.fromMap(Map<String, dynamic> data) {
-    return Roomie(
+  factory Tenant.fromJson(Map<String, dynamic> data) {
+    return Tenant(
+      id: data['id'],
       name: data['name'],
       lastName: data['lastName'],
       email: data['email'],
@@ -44,11 +80,8 @@ class Roomie {
       age: data['age'],
       gender: data['gender'],
       occupation: data['occupation'],
-      pets: data['pets'],
-      smoker: data['smoker'],
       photo: data['photo'],
-      // searchRoomie: data['searchRoomie'],
+      preferences: Preferences.fromJson(data['preferences']),
     );
   }
-
 }

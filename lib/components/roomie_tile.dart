@@ -1,10 +1,10 @@
 import 'package:app_mobile_plusroom/components/profile_image.dart';
-import 'package:app_mobile_plusroom/models/roomie.dart';
 import 'package:flutter/material.dart';
+import '../models/roomie.dart';
 import '../pages/roomie_detail_page.dart';
 
 class RoomieTile extends StatelessWidget {
-  final Roomie roomie;
+  final Tenant roomie;
 
   RoomieTile({
     super.key,
@@ -79,31 +79,38 @@ class RoomieTile extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            roomie.occupation == "Estudiante"
+            roomie.occupation == "Student"
                 ? const Icon(Icons.school)
                 : const Icon(Icons.work),
             const SizedBox(width: 5),
             Text(roomie.occupation)
           ],
         ),
-        roomie.pets == true
+        roomie.preferences.petFriendly == true
             ? const Row(
                 children: [
                   Icon(Icons.pets),
                   SizedBox(width: 5),
-                  Text('Mascotas'),
+                  Text('Pet friendly'),
                 ],
               )
             : Container(),
-        roomie.smoker == true
+        roomie.preferences.smokingPreference == true
             ? const Row(
                 children: [
                   Icon(Icons.smoking_rooms),
                   SizedBox(width: 5),
-                  Text('Fumador'),
+                  Text('Smoker'),
                 ],
               )
             : Container(),
+        Row(
+          children: [
+            Icon(Icons.location_on),
+            const SizedBox(width: 5),
+            Expanded(child: Text('${roomie.preferences.locationPreference}')),
+          ],
+        ),
       ],
     );
   }
@@ -133,7 +140,7 @@ class RoomieTile extends StatelessWidget {
         );
       },
       child: const Text(
-        "Más información",
+        "More information",
       ),
     );
   }
