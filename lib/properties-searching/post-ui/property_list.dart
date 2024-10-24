@@ -4,13 +4,13 @@ import '../../models/Post.dart';
 class PropertyList extends StatelessWidget {
   final List<Post> properties;
   final VoidCallback onDetailsPressed;
-  final Future<void> Function() onRefresh; // Nueva función para refrescar
+  final Future<void> Function() onRefresh;
 
   const PropertyList({
     Key? key,
     required this.properties,
     required this.onDetailsPressed,
-    required this.onRefresh, // Añadido aquí
+    required this.onRefresh,
   }) : super(key: key);
 
   @override
@@ -25,7 +25,7 @@ class PropertyList extends StatelessWidget {
     }
 
     return RefreshIndicator(
-      onRefresh: onRefresh, // Función que se llama al jalar para refrescar
+      onRefresh: onRefresh,
       child: ListView.builder(
         itemCount: properties.length,
         itemBuilder: (context, index) {

@@ -1,5 +1,4 @@
-
-import 'package:app_mobile_plusroom/properties-searching/search-page.dart';
+import 'package:app_mobile_plusroom/router/router.dart';
 import 'package:flutter/material.dart';
 
 
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const PropertiesPage(),
+      home: BottomNavBar()
     );
   }
 }
