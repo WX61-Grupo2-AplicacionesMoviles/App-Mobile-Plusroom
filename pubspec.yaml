@@ -63,6 +63,7 @@ flutter:
   assets:
     - lib/assets/icon_plusroom.jpeg
     - lib/assets/icon_logo.jpeg
+    - lib/assets/welcome_plusroom.jpeg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

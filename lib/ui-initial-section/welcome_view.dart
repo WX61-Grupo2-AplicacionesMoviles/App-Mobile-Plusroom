@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:renstatefrontend/shared/bottomNavigationApp.dart';
 import 'package:app_mobile_plusroom/shared/buttonApp.dart';
-//import 'package:renstatefrontend/shared/logo.dart';
 import 'package:app_mobile_plusroom/ui-profile/profile_view.dart';
 
 class WelcomeView extends StatelessWidget {
@@ -13,51 +11,60 @@ class WelcomeView extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color.fromARGB(255, 7, 64, 129),
-      body: Center(
-        child: Column(
-          children: [
-            //logo(),
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  tittleWelcome(),
-                  SizedBox(height: 15.0), // Espacio vertical entre el título y el Card
-                  Card(
-                    color: Colors.white,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: size.width * 0.1,
-                        vertical: size.height * 0.05,
-                      ),
-                      child: Column(
-                        children: [
-                          textWelcome(),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20.0), // Espacio vertical entre el Card y el botón
-                  buttonApp(
-                    "Profile",
-                        () {
-                      Navigator.pushNamed(context, ProfileView.id);
-                    },
-                  ),
-                ],
-              ),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'lib/assets/welcome_plusroom.jpeg',
+              fit: BoxFit.cover,
             ),
-          ],
-        ),
+          ),
+          // Foreground content
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Card(
+                        color: Colors.white.withOpacity(0.8),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: size.width * 0.1,
+                            vertical: size.height * 0.05,
+                          ),
+                          child: Column(
+                            children: [
+                              tittleWelcome(),
+                              SizedBox(height: 15.0),
+                              textWelcome(),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20.0),
+                      buttonApp(
+                        "See my profile",
+                            () {
+                          Navigator.pushNamed(context, ProfileView.id);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-      //bottomNavigationBar: bottomNavigationApp(context),
     );
   }
 }
 
-Widget tittleWelcome(){
+Widget tittleWelcome() {
   return Text(
     'WELCOME',
     style: TextStyle(
