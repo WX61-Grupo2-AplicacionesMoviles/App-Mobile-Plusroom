@@ -16,10 +16,6 @@ class RegisterViewLandlord extends StatelessWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     final TextEditingController confirmPasswordController = TextEditingController();
-    final TextEditingController descriptionController = TextEditingController();
-    final TextEditingController ageController = TextEditingController();
-    final TextEditingController genderController = TextEditingController();
-    final TextEditingController photoController = TextEditingController();
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -95,88 +91,13 @@ class RegisterViewLandlord extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            TextField(
-                              controller: descriptionController,
-                              decoration: InputDecoration(
-                                labelText: 'Description',
-                                labelStyle: TextStyle(
-                                  color: Color.fromARGB(255, 10, 9, 9),
-                                ),
-                              ),
-                            ),
-                            TextField(
-                              controller: ageController,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                labelText: 'Age',
-                                labelStyle: TextStyle(
-                                  color: Color.fromARGB(255, 10, 9, 9),
-                                ),
-                              ),
-                            ),
-                            TextField(
-                              controller: genderController,
-                              decoration: InputDecoration(
-                                labelText: 'Gender',
-                                labelStyle: TextStyle(
-                                  color: Color.fromARGB(255, 10, 9, 9),
-                                ),
-                              ),
-                            ),
-                            TextField(
-                              controller: photoController,
-                              decoration: InputDecoration(
-                                labelText: 'Photo URL',
-                                labelStyle: TextStyle(
-                                  color: Color.fromARGB(255, 10, 9, 9),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            TextButton(
-                              onPressed: () async {
-                                try {
-                                  final response = await apiService.registerLandlord(
-                                    nameController.text,
-                                    lastNameController.text,
-                                    emailController.text,
-                                    passwordController.text,
-                                    descriptionController.text,
-                                    int.parse(ageController.text),
-                                    genderController.text,
-                                    photoController.text,
-                                  );
-                                  if (response.statusCode == 200) {
-                                    // Handle successful registration
-                                    print("Registration successful");
-                                  } else {
-                                    // Handle error
-                                    print("Error: ${response.statusCode}");
-                                  }
-                                } catch (e) {
-                                  print("Error: ${e.toString()}");
-                                }
-                              },
-                              style: TextButton.styleFrom(
-                                backgroundColor: Color(0xFF427AA1),
-                                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                              ),
-                              child: Text(
-                                "Register",
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
                           ],
                         ),
                       ),
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'By registering, you accept our Terms of Use and Privacy Policy',
+                      'Al registrarte, aceptas nuestras Condiciones de uso y Politicas de privacidad',
                       style: TextStyle(
                         color: Color(0xFF454040),
                         fontSize: 14,
@@ -184,6 +105,40 @@ class RegisterViewLandlord extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     haveAccount(context),
+                    SizedBox(height: 10),
+                    TextButton(
+                      onPressed: () async {
+                        try {
+                          final response = await apiService.registerLandlord(
+                            nameController.text,
+                            lastNameController.text,
+                            emailController.text,
+                            passwordController.text,
+                          );
+                          if (response.statusCode == 200) {
+                            // Handle successful registration
+                            print("Registration successful");
+                          } else {
+                            // Handle error
+                            print("Error: ${response.statusCode}");
+                          }
+                        } catch (e) {
+                          print("Error: ${e.toString()}");
+                        }
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Color(0xFF427AA1),
+                        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                      ),
+                      child: Text(
+                        "Register",
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -196,7 +151,7 @@ class RegisterViewLandlord extends StatelessWidget {
 
   Widget textRegister() {
     return Text(
-      'Register as Landlord',
+      'Register',
       style: TextStyle(
         fontSize: 40.0,
         fontWeight: FontWeight.bold,

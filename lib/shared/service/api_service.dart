@@ -7,7 +7,7 @@ class ApiService {
 
   ApiService({required this.baseUrl});
 
-  Future<http.Response> registerLandlord(String name, String lastName, String email, String password, String description, int age, String gender, String photo) async {
+  Future<http.Response> registerLandlord(String name, String lastName, String email, String password) async {
     final url = Uri.parse('$baseUrl/landlord-controller/createLandlord');
     final response = await http.post(
       url,
@@ -19,10 +19,6 @@ class ApiService {
         'lastName': lastName,
         'email': email,
         'password': password,
-        'description': description,
-        'age': age,
-        'gender': gender,
-        'photo': photo,
       }),
     );
     return response;
