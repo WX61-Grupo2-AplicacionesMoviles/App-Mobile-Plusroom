@@ -22,13 +22,17 @@ class _ProfileViewState extends State<ProfileView> {
   void initState() {
     super.initState();
     fetchUserProfile(widget.userId).then((data) {
-      setState(() {
-        userProfile = data;
-      });
+      if (mounted) {
+        setState(() {
+          userProfile = data;
+        });
+      }
     }).catchError((error) {
-      setState(() {
-        errorMessage = error.toString();
-      });
+      if (mounted) {
+        setState(() {
+          errorMessage = error.toString();
+        });
+      }
     });
   }
 
@@ -109,7 +113,7 @@ class _ProfileViewState extends State<ProfileView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const EditProfileRoomie(),
+                                builder: (context) => EditProfileRoomie(userId: widget.userId),
                               ),
                             );
                           },

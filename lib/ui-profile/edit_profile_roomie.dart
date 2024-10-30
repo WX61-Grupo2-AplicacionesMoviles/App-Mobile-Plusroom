@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:app_mobile_plusroom/shared/buttonApp.dart';
 import 'package:app_mobile_plusroom/router/routes.dart';
 
 class EditProfileRoomie extends StatefulWidget {
-  const EditProfileRoomie({super.key});
+  final int userId;
+
+  const EditProfileRoomie({super.key, required this.userId});
   static String id = 'edit_profile_roomie';
 
   @override
@@ -11,10 +15,81 @@ class EditProfileRoomie extends StatefulWidget {
 }
 
 class _EditProfileRoomieState extends State<EditProfileRoomie> {
-  bool _hasPets = false;
-  bool _lookingForRoomies = false;
-  bool _smokes = false;
-  String _selectedOccupation = 'Select Occupation';
+  bool _searchRoomie = false;
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _dniController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
+  final TextEditingController _genderController = TextEditingController();
+  final TextEditingController _occupationController = TextEditingController();
+  final TextEditingController _photoController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
+    final String userId = widget.userId.toString();
+    final String url = 'https://giving-perception-production.up.railway.app/api/tenants/$userId';
+    print('Fetching data from URL: $url');
+
+    final response = await http.get(Uri.parse(url));
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      print('Parsed data: $data');
+      setState(() {
+        _nameController.text = data['name'] ?? '';
+        _lastNameController.text = data['lastName'] ?? '';
+        _emailController.text = data['email'] ?? '';
+        _descriptionController.text = data['description'] ?? '';
+        _dniController.text = data['dni'] ?? '';
+        _ageController.text = data['age']?.toString() ?? '';
+        _genderController.text = data['gender'] ?? '';
+        _occupationController.text = data['occupation'] ?? '';
+        _searchRoomie = data['searchRoomie'] ?? false;
+        _photoController.text = data['photo'] ?? '';
+      });
+    } else {
+      print('Error al cargar los datos del usuario: ${response.statusCode}');
+    }
+  }
+
+  Future<void> _updateUserData() async {
+    final String userId = widget.userId.toString();
+    final response = await http.put(
+      Uri.parse('https://giving-perception-production.up.railway.app/api/tenants/$userId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'name': _nameController.text,
+        'lastName': _lastNameController.text,
+        'email': _emailController.text,
+        'description': _descriptionController.text,
+        'dni': _dniController.text,
+        'age': int.parse(_ageController.text),
+        'gender': _genderController.text,
+        'occupation': _occupationController.text,
+        'searchRoomie': _searchRoomie,
+        'photo': _photoController.text,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('Datos del usuario actualizados correctamente');
+    } else {
+      print('Error al actualizar los datos del usuario: ${response.statusCode}');
+      print('Response body: ${response.body}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,25 +113,16 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                         backgroundImage: AssetImage('lib/assets/img_profile.png'),
                       ),
                       SizedBox(height: 10),
-                      Text(
-                        'Rafael Lopez Perez',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
                     ],
                   ),
                 ),
-                const Column(
+                Column(
                   children: [
                     Padding(
                       padding: EdgeInsets.only(top: 5.0),
                     ),
                     Text(
-                      'Rafael Lopez Perez',
+                      _nameController.text,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -72,20 +138,42 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        cardInfo(context, "Rafael"),
-                        cardInfo(context, "Lopez Perez"),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            cardInfo(context, "33"),
-                            cardInfo(context, "Male"),
-                          ],
+                        TextField(
+                          controller: _nameController,
+                          decoration: const InputDecoration(labelText: 'Name'),
                         ),
-                        cardInfo(context, "rafael@gmail.com"),
-                        cardInfo(context, "987654321"),
-                        cardInfo(context, "Here is description about of user"),
-                        cardInfo(context, "Location"),
-                        const SizedBox(height: 20.0),
+                        TextField(
+                          controller: _lastNameController,
+                          decoration: const InputDecoration(labelText: 'Last Name'),
+                        ),
+                        TextField(
+                          controller: _emailController,
+                          decoration: const InputDecoration(labelText: 'Email'),
+                        ),
+                        TextField(
+                          controller: _descriptionController,
+                          decoration: const InputDecoration(labelText: 'Description'),
+                        ),
+                        TextField(
+                          controller: _dniController,
+                          decoration: const InputDecoration(labelText: 'DNI'),
+                        ),
+                        TextField(
+                          controller: _ageController,
+                          decoration: const InputDecoration(labelText: 'Age'),
+                        ),
+                        TextField(
+                          controller: _genderController,
+                          decoration: const InputDecoration(labelText: 'Gender'),
+                        ),
+                        TextField(
+                          controller: _occupationController,
+                          decoration: const InputDecoration(labelText: 'Occupation'),
+                        ),
+                        TextField(
+                          controller: _photoController,
+                          decoration: const InputDecoration(labelText: 'Photo URL'),
+                        ),
                         Row(
                           children: [
                             const Text(
@@ -97,99 +185,14 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                               ),
                             ),
                             Checkbox(
-                              value: _lookingForRoomies,
+                              value: _searchRoomie,
                               onChanged: (bool? value) {
                                 setState(() {
-                                  _lookingForRoomies = value ?? false;
+                                  _searchRoomie = value ?? false;
                                 });
                               },
                             ),
                           ],
-                        ),
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: DropdownButton<String>(
-                            value: _selectedOccupation,
-                            isExpanded: true,
-                            underline: const SizedBox(),
-                            items: <String>['Select Occupation', 'Student', 'Professional', 'Other']
-                                .map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                _selectedOccupation = newValue!;
-                              });
-                            },
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  'lib/assets/icon_pets.png',
-                                  width: 24,
-                                  height: 24,
-                                ),
-                                const SizedBox(width: 8.0),
-                                const Text(
-                                  '¿Tienes mascotas?',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                Checkbox(
-                                  value: _hasPets,
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      _hasPets = value ?? false;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            margin: const EdgeInsets.only(bottom: 50.0),
-                            child: Row(
-                              children: [
-                                Icon(Icons.smoking_rooms),
-                                const SizedBox(width: 8.0),
-                                const Text(
-                                  '¿Fumas?',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                Checkbox(
-                                  value: _smokes,
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      _smokes = value ?? false;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
                         ),
                         Container(
                           margin: const EdgeInsets.only(bottom: 20.0),
@@ -197,11 +200,12 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                             widthFactor: 0.5,
                             child: buttonApp(
                               "Save",
-                                  () {
+                                  () async {
+                                await _updateUserData();
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => BottomNavBar(initialIndex: 4, userId: 1), // Provide a valid userId
+                                    builder: (context) => BottomNavBar(initialIndex: 4, userId: widget.userId),
                                   ),
                                 );
                               },
@@ -227,31 +231,4 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
       ),
     );
   }
-}
-
-Widget cardInfo(context, String info) {
-  final size = MediaQuery.of(context).size;
-
-  return Card(
-    color: const Color(0xFFD9D9D9),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8.0),
-    ),
-    child: Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: size.width * 0.1,
-        vertical: 15,
-      ),
-      child: Center(
-        child: Text(
-          info,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            color: Color.fromARGB(255, 12, 11, 11),
-          ),
-        ),
-      ),
-    ),
-  );
 }
