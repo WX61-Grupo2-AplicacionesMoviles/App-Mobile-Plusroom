@@ -4,7 +4,9 @@ import 'package:app_mobile_plusroom/shared/buttonApp.dart';
 import 'package:app_mobile_plusroom/ui-profile/profile_view.dart';
 
 class WelcomeView extends StatelessWidget {
-  const WelcomeView({super.key});
+  final int userId;
+
+  const WelcomeView({super.key, required this.userId});
   static String id = 'welcome_view';
 
   @override
@@ -53,7 +55,7 @@ class WelcomeView extends StatelessWidget {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const BottomNavBar(initialIndex: 4),
+                              builder: (context) => BottomNavBar(initialIndex: 4, userId: userId),
                             ),
                           );
                         },

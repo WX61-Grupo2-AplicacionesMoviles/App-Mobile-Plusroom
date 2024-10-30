@@ -7,7 +7,8 @@ import 'package:app_mobile_plusroom/ui-initial-section/welcome_view.dart';
 class BottomNavBar extends StatefulWidget {
   static String id = 'nav_bar';
   final int initialIndex;
-  const BottomNavBar({super.key, this.initialIndex = 0});
+  final int userId; // Add userId parameter
+  const BottomNavBar({super.key, this.initialIndex = 0, required this.userId});
 
   @override
   _BottomNavBarState createState() => _BottomNavBarState();
@@ -15,20 +16,20 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   late int _currentIndex;
+  late List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
     _currentIndex = widget.initialIndex;
+    _pages = [
+      WelcomeView(userId: widget.userId), // Pass userId here
+      const PropertiesPage(),
+      const AddPropertyPage(),
+      const MessagesPage(),
+      ProfileView(userId: widget.userId),
+    ];
   }
-
-  final List<Widget> _pages = [
-    const WelcomeView(),
-    const PropertiesPage(),
-    const AddPropertyPage(),
-    const MessagesPage(),
-    const ProfileView(),
-  ];
 
   void _onTap(int index) {
     setState(() {

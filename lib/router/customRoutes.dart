@@ -10,7 +10,7 @@ var customRoutes = <String, WidgetBuilder>{
   LoginView.id: (_) => const LoginView(),
   RegisterView.id: (_) => const RegisterView(),
   InitView.id: (_) => const InitView(),
-  WelcomeView.id: (_) => const WelcomeView(),
-  ProfileView.id: (_) => const ProfileView(),
-  BottomNavBar.id: (_) => const BottomNavBar()
+  WelcomeView.id: (_) => const WelcomeView(userId: 1),
+  ProfileView.id: (context) => ProfileView(userId: 1), // Proporciona un userId válido
+  BottomNavBar.id: (context) => BottomNavBar(userId: 1), // Proporciona un userId válido
 };

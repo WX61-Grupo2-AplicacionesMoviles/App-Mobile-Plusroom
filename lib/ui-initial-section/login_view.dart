@@ -1,8 +1,11 @@
 import 'package:app_mobile_plusroom/router/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/register_view.dart';
+import 'package:app_mobile_plusroom/ui-initial-section/welcome_view.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+int? userId; // Variable global para almacenar el userId
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -32,10 +35,14 @@ class _LoginViewState extends State<LoginView> {
     if (response.statusCode == 200) {
       final responseData = jsonDecode(response.body);
       if (responseData is int) {
-        final userId = responseData;
-        // Guardar el ID del usuario para usarlo más tarde
+        userId = responseData; // Guardar el ID del usuario
         print('Usuario autenticado exitosamente. ID: $userId');
-        Navigator.pushNamed(context, BottomNavBar.id);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BottomNavBar(initialIndex: 0, userId: userId!),
+          ),
+        );
       } else {
         print('Respuesta inesperada del servidor: $responseData');
         ScaffoldMessenger.of(context).showSnackBar(
@@ -45,7 +52,6 @@ class _LoginViewState extends State<LoginView> {
     } else {
       print('Error al autenticar usuario: ${response.statusCode}');
       print('Cuerpo de la respuesta: ${response.body}');
-      // Mostrar un mensaje de error al usuario
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al iniciar sesión. Verifica tus credenciales.')),
       );

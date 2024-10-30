@@ -1,10 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/shared/buttonApp.dart';
 import 'package:app_mobile_plusroom/ui-profile/edit_profile_roomie.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class ProfileView extends StatelessWidget {
-  const ProfileView({super.key});
+class ProfileView extends StatefulWidget {
+  final int userId;
+
+  const ProfileView({super.key, required this.userId});
   static String id = 'profile_view';
+
+  @override
+  _ProfileViewState createState() => _ProfileViewState();
+}
+
+class _ProfileViewState extends State<ProfileView> {
+  Map<String, dynamic>? userProfile;
+  String? errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserProfile(widget.userId).then((data) {
+      setState(() {
+        userProfile = data;
+      });
+    }).catchError((error) {
+      setState(() {
+        errorMessage = error.toString();
+      });
+    });
+  }
+
+  Future<Map<String, dynamic>> fetchUserProfile(int userId) async {
+    final url = Uri.parse('https://giving-perception-production.up.railway.app/api/tenants/$userId');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else if (response.statusCode == 404) {
+      throw Exception('Profile not found');
+    } else {
+      throw Exception('Error fetching profile data: ${response.statusCode}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +52,15 @@ class ProfileView extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: Center(
-        child: Column(
+        child: userProfile == null
+            ? errorMessage != null
+            ? Text(errorMessage!)
+            : CircularProgressIndicator()
+            : Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 20.0),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
               child: Column(
                 children: [
                   CircleAvatar(
@@ -26,7 +69,7 @@ class ProfileView extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Rafael Lopez Perez',
+                    userProfile!['name'] + ' ' + userProfile!['lastName'],
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -37,21 +80,6 @@ class ProfileView extends StatelessWidget {
                 ],
               ),
             ),
-            const Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 5.0),
-                ),
-                Text(
-                  'Rafael Lopez Perez',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 239, 237, 237),
-                  ),
-                ),
-              ],
-            ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 15.0),
               child: FractionallySizedBox(
@@ -59,49 +87,24 @@ class ProfileView extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    cardInfo(context, "Rafael"),
-                    cardInfo(context, "Lopez Perez"),
+                    cardInfo(context, userProfile!['name'], 'Name'),
+                    cardInfo(context, userProfile!['lastName'], 'Last Name'),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        cardInfo(context, "33"),
-                        cardInfo(context, "Male"),
+                        cardInfo(context, userProfile!['age'].toString(), 'Age'),
+                        cardInfo(context, userProfile!['gender'], 'Gender'),
                       ],
                     ),
-                    cardInfo(context, "rafael@gmail.com"),
-                    cardInfo(context, "987654321"),
-                    cardInfo(context, "Here is description about of user"),
-                    const SizedBox(height: 20.0),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        margin: const EdgeInsets.only(top: 10.0, bottom: 50.0),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'lib/assets/icon_pets.png',
-                              width: 24,
-                              height: 24,
-                            ),
-                            const SizedBox(width: 8.0),
-                            const Text(
-                              'Con mascotas',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    cardInfo(context, userProfile!['email'], 'Email'),
+                    cardInfo(context, userProfile!['dni'], 'DNI'),
+                    cardInfo(context, userProfile!['description'], 'Description'),
                     Container(
-                      margin: const EdgeInsets.only(bottom: 20.0),
+                      margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
                       child: FractionallySizedBox(
                         widthFactor: 0.5,
                         child: buttonApp(
-                          "Editar Perfil",
+                          "Edit Profile",
                               () {
                             Navigator.push(
                               context,
@@ -130,31 +133,31 @@ class ProfileView extends StatelessWidget {
       ),
     );
   }
-}
 
-Widget cardInfo(context, String info) {
-  final size = MediaQuery.of(context).size;
+  Widget cardInfo(BuildContext context, String info, String placeholder) {
+    final size = MediaQuery.of(context).size;
 
-  return Card(
-    color: const Color(0xFFD9D9D9),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8.0),
-    ),
-    child: Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: size.width * 0.1,
-        vertical: 15,
+    return Card(
+      color: const Color(0xFFD9D9D9),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
       ),
-      child: Center(
-        child: Text(
-          info,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            color: Color.fromARGB(255, 12, 11, 11),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: size.width * 0.1,
+          vertical: 15,
+        ),
+        child: Center(
+          child: Text(
+            info.isNotEmpty ? info : placeholder,
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: info.isNotEmpty ? Color.fromARGB(255, 12, 11, 11) : Colors.grey,
+            ),
           ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }

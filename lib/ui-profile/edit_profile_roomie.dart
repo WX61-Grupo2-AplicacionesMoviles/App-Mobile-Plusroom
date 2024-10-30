@@ -201,7 +201,7 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const BottomNavBar(initialIndex: 4),
+                                    builder: (context) => BottomNavBar(initialIndex: 4, userId: 1), // Provide a valid userId
                                   ),
                                 );
                               },
