@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/shared/buttonApp.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:app_mobile_plusroom/ui-profile/edit_profile_owner.dart';
 
 class ProfileOwner extends StatefulWidget {
   final int landlordId;
@@ -100,7 +101,6 @@ class _ProfileOwnerState extends State<ProfileOwner> {
                       ],
                     ),
                     cardInfo(context, userProfile!['email'] ?? '', 'Email'),
-                    cardInfo(context, userProfile!['dni'] ?? '', 'DNI'),
                     cardInfo(context, userProfile!['description'] ?? '', 'Description'),
                     Container(
                       margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
@@ -109,7 +109,12 @@ class _ProfileOwnerState extends State<ProfileOwner> {
                         child: buttonApp(
                           "Edit Profile",
                               () {
-                            // Add navigation to edit profile page if needed
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EditProfileOwner(landlordId: widget.landlordId),
+                              ),
+                            );
                           },
                         ),
                       ),
