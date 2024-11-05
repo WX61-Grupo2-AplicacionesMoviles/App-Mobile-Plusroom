@@ -2,7 +2,7 @@ class Preferences {
   final List<String> preferences;
   final List<String> hobbies;
   final String locationPreference;
-  final int budget;
+  final double budget;
   final String genderPreference;
   final int minAge;
   final int maxAge;
@@ -27,18 +27,27 @@ class Preferences {
 
   factory Preferences.fromJson(Map<String, dynamic> map) {
     return Preferences(
-      preferences: List<String>.from(map['preferences']),
-      hobbies: List<String>.from(map['hobbies']),
-      locationPreference: map['locationPreference'],
-      budget: map['budget'],
-      genderPreference: map['genderPreference'],
-      minAge: map['minAge'],
-      maxAge: map['maxAge'],
-      petFriendly: map['petFriendly'],
-      smokingPreference: map['smokingPreference'],
-      cleaningHabits: map['cleaningHabits'],
-      sleepingHabits: map['sleepingHabits'],
+      preferences: List<String>.from(map['preferences']) ?? [],
+      hobbies: List<String>.from(map['hobbies']) ?? [],
+      locationPreference: map['locationPreference'] ?? '',
+      budget: map['budget'] ?? 0.0,
+      genderPreference: map['genderPreference'] ?? '',
+      minAge: map['minAge'] ?? 0,
+      maxAge: map['maxAge'] ?? 0,
+      petFriendly: map['petFriendly'] ?? false,
+      smokingPreference: map['smokingPreference'] ?? false,
+      cleaningHabits: map['cleaningHabits'] ?? '',
+      sleepingHabits: map['sleepingHabits'] ?? '',
     );
+  }
+
+  @override
+  String toString() {
+    return "Preferences{preferences: $preferences, hobbies: $hobbies, "
+        "locationPreference: $locationPreference, budget: $budget, "
+        "genderPreference: $genderPreference, minAge: $minAge, maxAge: $maxAge, "
+        "petFriendly: $petFriendly, smokingPreference: $smokingPreference, "
+        "cleaningHabits: $cleaningHabits, sleepingHabits: $sleepingHabits}";
   }
 }
 
@@ -53,7 +62,7 @@ class Tenant {
   final String gender;
   final String occupation;
   final String photo;
-  final Preferences preferences;
+  Preferences? preferences;
 
   Tenant({
     required this.id,
@@ -66,22 +75,29 @@ class Tenant {
     required this.gender,
     required this.occupation,
     required this.photo,
-    required this.preferences,
+    this.preferences,
   });
 
   factory Tenant.fromJson(Map<String, dynamic> data) {
     return Tenant(
-      id: data['id'],
-      name: data['name'],
-      lastName: data['lastName'],
-      email: data['email'],
-      description: data['description'],
-      dni: data['dni'],
-      age: data['age'],
-      gender: data['gender'],
-      occupation: data['occupation'],
-      photo: data['photo'],
-      preferences: Preferences.fromJson(data['preferences']),
+      id: data['id'] ?? 0,
+      name: data['name'] ?? '',
+      lastName: data['lastName'] ?? '',
+      email: data['email'] ?? '',
+      description: data['description'] ?? '',
+      dni: data['dni'] ?? '',
+      age: data['age'] ?? 0,
+      gender: data['gender'] ?? '',
+      occupation: data['occupation'] ?? '',
+      photo: data['photo'] ?? '',
+      preferences: data['preferences'] != null ? Preferences.fromJson(data['preferences']) : null,
     );
+  }
+
+  @override
+  String toString() {
+    return "Tenant{id: $id, name: $name, lastName: $lastName, email: $email, "
+        "description: $description, dni: $dni, age: $age, gender: $gender, "
+        "occupation: $occupation, photo: $photo, preferences: $preferences}";
   }
 }

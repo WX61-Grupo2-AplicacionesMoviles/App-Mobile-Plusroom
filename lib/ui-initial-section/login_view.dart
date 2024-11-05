@@ -16,10 +16,25 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> loginUser(String email, String password) async {
+    // Para probar sin cuenta
+      userId = 1;
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BottomNavBar(initialIndex: 0, userId: userId!),
+        ),
+      );
+
+    }
+
+    // Para probar con cuenta
+    /*
     final url = Uri.parse('https://giving-perception-production.up.railway.app/api/tenants/login');
     final response = await http.post(
       url,
@@ -56,7 +71,9 @@ class _LoginViewState extends State<LoginView> {
         SnackBar(content: Text('Error al iniciar sesión. Verifica tus credenciales.')),
       );
     }
-  }
+    */
+
+
 
   @override
   Widget build(BuildContext context) {
