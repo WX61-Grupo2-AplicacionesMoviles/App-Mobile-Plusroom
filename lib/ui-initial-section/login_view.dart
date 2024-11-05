@@ -1,11 +1,12 @@
 import 'package:app_mobile_plusroom/router/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/register_view.dart';
-import 'package:app_mobile_plusroom/ui-initial-section/welcome_view.dart';
+import 'package:app_mobile_plusroom/ui-initial-section/register_view_landlord.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-int? userId; // Variable global para almacenar el userId
+int? tenantId; // Variable to store tenant ID
+int? landlordId; // Variable to store landlord ID
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -20,9 +21,12 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> loginUser(String email, String password) async {
-    final url = Uri.parse('https://giving-perception-production.up.railway.app/api/tenants/login');
-    final response = await http.post(
-      url,
+    final tenantUrl = Uri.parse('https://easygoing-perception-production.up.railway.app/api/tenants/login');
+    final landlordUrl = Uri.parse('https://easygoing-perception-production.up.railway.app/api/landlords/login');
+
+    // Try logging in as a tenant
+    final tenantResponse = await http.post(
+      tenantUrl,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -32,28 +36,55 @@ class _LoginViewState extends State<LoginView> {
       }),
     );
 
-    if (response.statusCode == 200) {
-      final responseData = jsonDecode(response.body);
+    if (tenantResponse.statusCode == 200) {
+      final responseData = jsonDecode(tenantResponse.body);
       if (responseData is int) {
-        userId = responseData; // Guardar el ID del usuario
-        print('Usuario autenticado exitosamente. ID: $userId');
+        tenantId = responseData; // Store tenant ID
+        print('Tenant authenticated successfully. ID: $tenantId');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => BottomNavBar(initialIndex: 0, userId: userId!),
+            builder: (context) => BottomNavBar(initialIndex: 0, tenantId: tenantId),
+          ),
+        );
+        return;
+      }
+    }
+
+    // If tenant login fails, try logging in as a landlord
+    final landlordResponse = await http.post(
+      landlordUrl,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': email,
+        'password': password,
+      }),
+    );
+
+    if (landlordResponse.statusCode == 200) {
+      final responseData = jsonDecode(landlordResponse.body);
+      if (responseData is int) {
+        landlordId = responseData; // Store landlord ID
+        print('Landlord authenticated successfully. ID: $landlordId');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BottomNavBar(initialIndex: 0, landlordId: landlordId),
           ),
         );
       } else {
-        print('Respuesta inesperada del servidor: $responseData');
+        print('Unexpected server response: $responseData');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al iniciar sesión. Respuesta inesperada del servidor.')),
+          SnackBar(content: Text('Error logging in. Unexpected server response.')),
         );
       }
     } else {
-      print('Error al autenticar usuario: ${response.statusCode}');
-      print('Cuerpo de la respuesta: ${response.body}');
+      print('Error authenticating user: ${landlordResponse.statusCode}');
+      print('Response body: ${landlordResponse.body}');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al iniciar sesión. Verifica tus credenciales.')),
+        SnackBar(content: Text('Error logging in. Check your credentials.')),
       );
     }
   }

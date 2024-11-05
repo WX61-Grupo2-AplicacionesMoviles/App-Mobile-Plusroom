@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 class RoomieService {
 
   // base url
-  final String apiUrl = "https://giving-perception-production.up.railway.app/api";
+  final String apiUrl = "https://easygoing-perception-production.up.railway.app/api";
 
 
   // get all roomies

@@ -5,9 +5,9 @@ import 'package:app_mobile_plusroom/shared/buttonApp.dart';
 import 'package:app_mobile_plusroom/router/routes.dart';
 
 class EditProfileRoomie extends StatefulWidget {
-  final int userId;
+  final int tenantId;
 
-  const EditProfileRoomie({super.key, required this.userId});
+  const EditProfileRoomie({super.key, required this.tenantId});
   static String id = 'edit_profile_roomie';
 
   @override
@@ -33,8 +33,8 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
   }
 
   Future<void> _fetchUserData() async {
-    final String userId = widget.userId.toString();
-    final String url = 'https://giving-perception-production.up.railway.app/api/tenants/$userId';
+    final String tenantId = widget.tenantId.toString();
+    final String url = 'https://easygoing-perception-production.up.railway.app/api/tenants/$tenantId';
     print('Fetching data from URL: $url');
 
     final response = await http.get(Uri.parse(url));
@@ -63,9 +63,9 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
   }
 
   Future<void> _updateUserData() async {
-    final String userId = widget.userId.toString();
+    final String tenantId = widget.tenantId.toString();
     final response = await http.put(
-      Uri.parse('https://giving-perception-production.up.railway.app/api/tenants/$userId'),
+      Uri.parse('https://easygoing-perception-production.up.railway.app/api/tenants/$tenantId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -205,7 +205,7 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => BottomNavBar(initialIndex: 4, userId: widget.userId),
+                                    builder: (context) => BottomNavBar(initialIndex: 4, tenantId: widget.tenantId),
                                   ),
                                 );
                               },

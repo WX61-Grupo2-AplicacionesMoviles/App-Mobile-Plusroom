@@ -5,9 +5,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ProfileView extends StatefulWidget {
-  final int userId;
+  final int tenantId;
 
-  const ProfileView({super.key, required this.userId});
+  const ProfileView({super.key, required this.tenantId});
   static String id = 'profile_view';
 
   @override
@@ -21,7 +21,7 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   void initState() {
     super.initState();
-    fetchUserProfile(widget.userId).then((data) {
+    fetchUserProfile(widget.tenantId).then((data) {
       if (mounted) {
         setState(() {
           userProfile = data;
@@ -36,8 +36,8 @@ class _ProfileViewState extends State<ProfileView> {
     });
   }
 
-  Future<Map<String, dynamic>> fetchUserProfile(int userId) async {
-    final url = Uri.parse('https://giving-perception-production.up.railway.app/api/tenants/$userId');
+  Future<Map<String, dynamic>> fetchUserProfile(int tenantId) async {
+    final url = Uri.parse('https://easygoing-perception-production.up.railway.app/api/tenants/$tenantId');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -113,7 +113,7 @@ class _ProfileViewState extends State<ProfileView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => EditProfileRoomie(userId: widget.userId),
+                                builder: (context) => EditProfileRoomie(tenantId: widget.tenantId),
                               ),
                             );
                           },

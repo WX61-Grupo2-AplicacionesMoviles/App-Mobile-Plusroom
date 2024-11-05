@@ -1,14 +1,17 @@
+import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/example_pages/example_pages.dart';
 import 'package:app_mobile_plusroom/properties-searching/search-page.dart';
-import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/ui-profile/profile_view.dart';
+import 'package:app_mobile_plusroom/ui-profile/profile_owner.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/welcome_view.dart';
 
 class BottomNavBar extends StatefulWidget {
   static String id = 'nav_bar';
   final int initialIndex;
-  final int userId; // Add userId parameter
-  const BottomNavBar({super.key, this.initialIndex = 0, required this.userId});
+  final int? tenantId;
+  final int? landlordId;
+
+  const BottomNavBar({super.key, this.initialIndex = 0, this.tenantId, this.landlordId});
 
   @override
   _BottomNavBarState createState() => _BottomNavBarState();
@@ -23,11 +26,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
     super.initState();
     _currentIndex = widget.initialIndex;
     _pages = [
-      WelcomeView(userId: widget.userId), // Pass userId here
+      WelcomeView(tenantId: widget.tenantId, landlordId: widget.landlordId),
       const PropertiesPage(),
       const AddPropertyPage(),
       const MessagesPage(),
-      ProfileView(userId: widget.userId),
+      if (widget.tenantId != null)
+        ProfileView(tenantId: widget.tenantId!)
+      else if (widget.landlordId != null)
+        ProfileOwner(landlordId: widget.landlordId!)
     ];
   }
 

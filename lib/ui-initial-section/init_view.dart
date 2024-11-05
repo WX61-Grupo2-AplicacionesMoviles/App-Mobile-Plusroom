@@ -106,12 +106,12 @@ class InitView extends StatelessWidget {
                     child: Column(
                       children: [
                         Image.asset(
-                          'lib/assets/landlord.jpeg',
+                          'lib/assets/tenant.jpeg',
                           width: 100,
                           height: 100,
                         ),
                         const SizedBox(height: 10),
-                        const Text('Arrendatario'),
+                        const Text('Arrendador'),
                       ],
                     ),
                   ),
@@ -126,12 +126,12 @@ class InitView extends StatelessWidget {
                     child: Column(
                       children: [
                         Image.asset(
-                          'lib/assets/tenant.jpeg',
+                          'lib/assets/landlord.jpeg',
                           width: 100,
                           height: 100,
                         ),
                         const SizedBox(height: 10),
-                        const Text('Arrendador'),
+                        const Text('Arrendatario'),
                       ],
                     ),
                   ),

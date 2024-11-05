@@ -1,9 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/shared/buttonApp.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class ProfileOwner extends StatelessWidget {
-  const ProfileOwner({super.key});
+class ProfileOwner extends StatefulWidget {
+  final int landlordId;
+
+  const ProfileOwner({super.key, required this.landlordId});
   static String id = 'profile_owner';
+
+  @override
+  _ProfileOwnerState createState() => _ProfileOwnerState();
+}
+
+class _ProfileOwnerState extends State<ProfileOwner> {
+  Map<String, dynamic>? userProfile;
+  String? errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserProfile(widget.landlordId).then((data) {
+      if (mounted) {
+        setState(() {
+          userProfile = data;
+        });
+      }
+    }).catchError((error) {
+      if (mounted) {
+        setState(() {
+          errorMessage = error.toString();
+        });
+      }
+    });
+  }
+
+  Future<Map<String, dynamic>> fetchUserProfile(int landlordId) async {
+    final url = Uri.parse('https://easygoing-perception-production.up.railway.app/api/landlords/$landlordId');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else if (response.statusCode == 404) {
+      throw Exception('Profile not found');
+    } else {
+      throw Exception('Error fetching profile data: ${response.statusCode}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,11 +55,15 @@ class ProfileOwner extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: Center(
-        child: Column(
+        child: userProfile == null
+            ? errorMessage != null
+            ? Text(errorMessage!)
+            : CircularProgressIndicator()
+            : Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 20.0),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
               child: Column(
                 children: [
                   CircleAvatar(
@@ -25,7 +72,7 @@ class ProfileOwner extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Rafael Lopez Perez',
+                    (userProfile!['name'] ?? '') + ' ' + (userProfile!['lastName'] ?? ''),
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -36,21 +83,6 @@ class ProfileOwner extends StatelessWidget {
                 ],
               ),
             ),
-            const Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 5.0),
-                ),
-                Text(
-                  'Rafael Lopez Perez',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 239, 237, 237),
-                  ),
-                ),
-              ],
-            ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 15.0),
               child: FractionallySizedBox(
@@ -58,25 +90,27 @@ class ProfileOwner extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    cardInfo(context, "Rafael"),
-                    cardInfo(context, "Lopez Perez"),
+                    cardInfo(context, userProfile!['name'] ?? '', 'Name'),
+                    cardInfo(context, userProfile!['lastName'] ?? '', 'Last Name'),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        cardInfo(context, "33"),
-                        cardInfo(context, "Male"),
+                        cardInfo(context, userProfile!['age']?.toString() ?? '', 'Age'),
+                        cardInfo(context, userProfile!['gender'] ?? '', 'Gender'),
                       ],
                     ),
-                    cardInfo(context, "rafael@gmail.com"),
-                    cardInfo(context, "987654321"),
-                    cardInfo(context, "Here is description about of user"),
+                    cardInfo(context, userProfile!['email'] ?? '', 'Email'),
+                    cardInfo(context, userProfile!['dni'] ?? '', 'DNI'),
+                    cardInfo(context, userProfile!['description'] ?? '', 'Description'),
                     Container(
                       margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
                       child: FractionallySizedBox(
                         widthFactor: 0.5,
                         child: buttonApp(
-                          "Editar Perfil",
-                              () {},
+                          "Edit Profile",
+                              () {
+                            // Add navigation to edit profile page if needed
+                          },
                         ),
                       ),
                     ),
@@ -97,31 +131,31 @@ class ProfileOwner extends StatelessWidget {
       ),
     );
   }
-}
 
-Widget cardInfo(context, String info) {
-  final size = MediaQuery.of(context).size;
+  Widget cardInfo(BuildContext context, String info, String placeholder) {
+    final size = MediaQuery.of(context).size;
 
-  return Card(
-    color: const Color(0xFFD9D9D9),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8.0),
-    ),
-    child: Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: size.width * 0.1,
-        vertical: 15,
+    return Card(
+      color: const Color(0xFFD9D9D9),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
       ),
-      child: Center(
-        child: Text(
-          info,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            color: Color.fromARGB(255, 12, 11, 11),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: size.width * 0.1,
+          vertical: 15,
+        ),
+        child: Center(
+          child: Text(
+            info.isNotEmpty ? info : placeholder,
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: info.isNotEmpty ? Color.fromARGB(255, 12, 11, 11) : Colors.grey,
+            ),
           ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
