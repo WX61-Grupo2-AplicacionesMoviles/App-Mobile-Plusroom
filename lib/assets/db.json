@@ -1,0 +1,104 @@
+{
+  "tenants": [
+    {
+      "id": 1,
+      "name": "John",
+      "lastName": "Smith",
+      "email": "john.smith@example.com",
+      "description": "Friendly and outgoing person. Loves to cook and explore new places.",
+      "dni": "A12345678",
+      "age": 25,
+      "gender": "male",
+      "occupation": "Student",
+      "photo": "https://img.freepik.com/foto-gratis/retrato-hombre-reir_23-2148859448.jpg?t=st=1729784020~exp=1729787620~hmac=fca3727afae587370da504fccf1eca9faacba7c921f736649a62b322e35a98af&w=1060",
+      "preferences": {
+        "preferences": ["Non-smoker", "Quiet environment"],
+        "hobbies": ["Cooking", "Hiking", "Reading"],
+        "locationPreference": "New York",
+        "budget": 1200,
+        "genderPreference": "male",
+        "minAge": 20,
+        "maxAge": 30,
+        "petFriendly": true,
+        "smokingPreference": true,
+        "cleaningHabits": "Organized",
+        "sleepingHabits": "Early riser"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Emily",
+      "lastName": "Johnson",
+      "email": "emily.johnson@example.com",
+      "description": "Creative designer who enjoys painting and art galleries.",
+      "dni": "B87654321",
+      "age": 28,
+      "gender": "female",
+      "occupation": "Professional",
+      "photo": "https://img.freepik.com/foto-gratis/selfie-retrato-videollamada_23-2149186122.jpg?t=st=1729783977~exp=1729787577~hmac=f2669affe3d588b039f38db006d801575e553c9ad69b9c688256e1a05d8a5b44&w=1800",
+      "preferences": {
+        "preferences": ["Pet-friendly", "Close to public transportation"],
+        "hobbies": ["Painting", "Yoga", "Traveling"],
+        "locationPreference": "Los Angeles",
+        "budget": 1500,
+        "genderPreference": "female",
+        "minAge": 25,
+        "maxAge": 35,
+        "petFriendly": true,
+        "smokingPreference": false,
+        "cleaningHabits": "Clean",
+        "sleepingHabits": "Night owl"
+      }
+    },
+    {
+      "id": 3,
+      "name": "Michael",
+      "lastName": "Williams",
+      "email": "michael.williams@example.com",
+      "description": "Software engineer passionate about technology and innovation.",
+      "dni": "C76543210",
+      "age": 30,
+      "gender": "male",
+      "occupation": "Professional",
+      "photo": "https://img.freepik.com/foto-gratis/close-up-retrato-hombre-alegre-piel-oscura-bigote-barba_273609-8633.jpg?t=st=1729784091~exp=1729787691~hmac=7df5da3070833a72046db435332b9d9171eca7013fbbca2c208b45323f801c39&w=1800",
+      "preferences": {
+        "preferences": ["Quiet neighborhood", "Non-smoker"],
+        "hobbies": ["Coding", "Video games", "Cycling"],
+        "locationPreference": "San Francisco",
+        "budget": 1800,
+        "genderPreference": "male",
+        "minAge": 25,
+        "maxAge": 35,
+        "petFriendly": false,
+        "smokingPreference": false,
+        "cleaningHabits": "Tidy",
+        "sleepingHabits": "Flexible"
+      }
+    },
+    {
+      "id": 4,
+      "name": "Jessica",
+      "lastName": "Brown",
+      "email": "jessica.brown@example.com",
+      "description": "Freelancer who loves the outdoors and long hikes.",
+      "dni": "D65432109",
+      "age": 24,
+      "gender": "female",
+      "occupation": "Student",
+      "photo": "https://img.freepik.com/foto-gratis/retrato-mujer-caucasica-sonriendo_53876-146505.jpg?t=st=1729784112~exp=1729787712~hmac=676c98db4ac45eaa15289d6c5f2dc803fba85394b7c592d4cdbf5432bb40969a&w=1480",
+      "preferences": {
+        "preferences": ["Pet-friendly", "Quiet environment"],
+        "hobbies": ["Hiking", "Photography", "Cooking"],
+        "locationPreference": "Chicago",
+        "budget": 1000,
+        "genderPreference": "female",
+        "minAge": 20,
+        "maxAge": 30,
+        "petFriendly": true,
+        "smokingPreference": true,
+        "cleaningHabits": "Average",
+        "sleepingHabits": "Light sleeper"
+      }
+    }
+  ]
+}
