@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 Future<void> registerUser(Map<String, dynamic> userData) async {
-  final url = Uri.parse('https://giving-perception-production.up.railway.app/api/tenants/createTenant');
+  final url = Uri.parse('https://easygoing-perception-production.up.railway.app/api/tenants/createTenant');
   final response = await http.post(
     url,
     headers: <String, String>{

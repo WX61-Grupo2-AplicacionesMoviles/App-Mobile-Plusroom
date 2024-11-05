@@ -6,7 +6,7 @@ class RegisterViewLandlord extends StatelessWidget {
   RegisterViewLandlord({super.key});
   static String id = 'register_view_landlord';
 
-  final ApiService apiService = ApiService(baseUrl: 'https://giving-perception-production.up.railway.app');
+  final ApiService apiService = ApiService(baseUrl: 'https://easygoing-perception-production.up.railway.app');
 
   @override
   Widget build(BuildContext context) {

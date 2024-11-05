@@ -20,7 +20,7 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> loginUser(String email, String password) async {
-    final url = Uri.parse('https://giving-perception-production.up.railway.app/api/tenants/login');
+    final url = Uri.parse('https://easygoing-perception-production.up.railway.app/api/tenants/login');
     final response = await http.post(
       url,
       headers: <String, String>{

@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 class PostService {
   final String apiUrl;
 
-  PostService() : apiUrl = 'https://giving-perception-production.up.railway.app/api/posts';
+  PostService() : apiUrl = 'https://easygoing-perception-production.up.railway.app/api/posts';
 
   Future<List<Post>> getPosts() async {
     final response = await http.get(Uri.parse(apiUrl));

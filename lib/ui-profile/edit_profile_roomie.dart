@@ -34,7 +34,7 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
 
   Future<void> _fetchUserData() async {
     final String userId = widget.userId.toString();
-    final String url = 'https://giving-perception-production.up.railway.app/api/tenants/$userId';
+    final String url = 'https://easygoing-perception-production.up.railway.app/api/tenants/$userId';
     print('Fetching data from URL: $url');
 
     final response = await http.get(Uri.parse(url));
@@ -65,7 +65,7 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
   Future<void> _updateUserData() async {
     final String userId = widget.userId.toString();
     final response = await http.put(
-      Uri.parse('https://giving-perception-production.up.railway.app/api/tenants/$userId'),
+      Uri.parse('https://easygoing-perception-production.up.railway.app/api/tenants/$userId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

@@ -37,7 +37,7 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   Future<Map<String, dynamic>> fetchUserProfile(int userId) async {
-    final url = Uri.parse('https://giving-perception-production.up.railway.app/api/tenants/$userId');
+    final url = Uri.parse('https://easygoing-perception-production.up.railway.app/api/tenants/$userId');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
