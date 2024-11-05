@@ -47,8 +47,9 @@ class _PropertiesPageState extends State<PropertiesPage>
       setState(() {}); // Forzar reconstrucción al cambiar de pestaña
     });
     fetchProperties();
-    _getRoomieJsonData();
-    //fetchRoomies();
+
+    // first load rommie data, then preferences
+    _fetchRoomies().then((value) => findRoomiePreferences());
   }
   void _getRoomieJsonData() async {
     final String response = await rootBundle.loadString('lib/assets/db.json');
@@ -75,18 +76,45 @@ class _PropertiesPageState extends State<PropertiesPage>
     }
   }
 
-  Future<void> fetchRoomies() async {
+  Future<void> _fetchRoomies() async {
     try {
-      final List<Tenant> tenants = await _roomieService.getRoomies();
+      List<Tenant> data = await _roomieService.getRoomies();
       setState(() {
-        roomies = tenants;
-        filteredRoomies = tenants;
+        roomies = data;
+        filteredRoomies = data;
       });
+
+      //print data
+      print("Tenants loaded: $roomies");
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load roomies: $error')),
-      );
+      print('Error al obtener roomies: $error');
     }
+  }
+
+  Future<void> _fetchRoomiePreference(Tenant roomie) async {
+    try {
+      Preferences? data = await _roomieService.getRoomiePreferenceById(roomie);
+      setState(() {
+        roomie.preferences = data;
+      });
+
+      //print data
+      print("Preferences loaded: $data");
+    } catch (error) {
+      print('Error al obtener preferencias del roomie: $error');
+    }
+  }
+
+  void findRoomiePreferences() async {
+    await Future.forEach(roomies, (Tenant roomie) async {
+      await _fetchRoomiePreference(roomie);
+      print("from findRoomiePreferences: $roomie");
+    });
+    setState(() {
+      // ensure all roomies have preferences
+      roomies = roomies.where((roomie) => roomie.preferences != null).toList();
+      filteredRoomies = roomies; // Update filtered roomies
+    });
   }
 
   void filterProperties(String query) {
@@ -100,11 +128,11 @@ class _PropertiesPageState extends State<PropertiesPage>
       } else {
         // Filtrar roomies
         filteredRoomies = roomies.where((roomie){ // Cambiado a filteredRoomies
-          bool matchesLocation = roomie.preferences.locationPreference.toLowerCase().contains(query.toLowerCase());
+          bool matchesLocation = roomie.preferences!.locationPreference.toLowerCase().contains(query.toLowerCase());
           bool matchesStudent = !filterStudent || roomie.occupation == "Student";
           bool matchesProfessional = !filterProfessional || roomie.occupation != "Student";
-          bool matchesPets = !filterPets || roomie.preferences.petFriendly == true;
-          bool matchesNonSmoker = !filterNonSmoker || roomie.preferences.smokingPreference == false;
+          bool matchesPets = !filterPets || roomie.preferences!.petFriendly == true;
+          bool matchesNonSmoker = !filterNonSmoker || roomie.preferences!.smokingPreference == false;
 
           return matchesLocation && matchesStudent && matchesProfessional && matchesPets && matchesNonSmoker;
         }).toList();
@@ -177,13 +205,13 @@ class _PropertiesPageState extends State<PropertiesPage>
         Expanded(
           child: filteredRoomies.isNotEmpty
               ? ListView.builder(
-            itemCount: filteredRoomies.length,
-            itemBuilder: (context, index) {
-              final roomie = filteredRoomies[index];
-              return RoomieTile(roomie: roomie);
-            },
-          )
-              : const Center(child: Text("No roomies available")),
+                  itemCount: filteredRoomies.length,
+                  itemBuilder: (context, index) {
+                    final roomie = filteredRoomies[index];
+                    return RoomieTile(roomie: roomie);
+                  },
+                )
+              : const Center(child: Text("No roomies available", style: TextStyle(fontSize: 18, color: Colors.red),)),
         ),
       ],
     );

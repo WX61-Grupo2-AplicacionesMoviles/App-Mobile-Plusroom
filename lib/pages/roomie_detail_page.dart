@@ -29,9 +29,9 @@ class RoomiePage extends StatelessWidget {
                 children: [
                   // user image
                   roomie.photo.trim().isNotEmpty ? ProfileImage(roomiePhoto: roomie.photo, radius: 60.0,) : iconProfile(),
-        
+
                   const SizedBox(height: 10),
-        
+
                   // user name
                   Text(
                     roomie.name,
@@ -44,9 +44,9 @@ class RoomiePage extends StatelessWidget {
                   const SizedBox(height: 5),
                 ],
               ),
-        
+
               const SizedBox(height: 15),
-        
+
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -70,33 +70,33 @@ class RoomiePage extends StatelessWidget {
                       ],
                     ),
                   ),
-        
+
                   const SizedBox(height: 25),
 
-        
+
                   const SizedBox(height: 25),
-        
+
                   Center(
                     child: // send message
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: Colors.blue.shade900,
-                            foregroundColor: Colors.white,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(5)),
-                            ),
-                            side: const BorderSide(color: Colors.white, width: 1),
-                          ),
-                          onPressed: () {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //       builder: (context) => ChatPage(
-                            //         userName: roomie.name,
-                            //       ),
-                            //     ));
-                            },
-                          child: const Text("Send message"),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.blue.shade900,
+                        foregroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                        side: const BorderSide(color: Colors.white, width: 1),
+                      ),
+                      onPressed: () {
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) => ChatPage(
+                        //         userName: roomie.name,
+                        //       ),
+                        //     ));
+                      },
+                      child: const Text("Send message"),
                     ),
                   ),
                 ],
@@ -139,36 +139,36 @@ class RoomiePage extends StatelessWidget {
             Text("${roomie.age}"),
           ],
         ),
-        roomie.preferences.petFriendly == true
+        roomie.preferences!.petFriendly == true
             ? Row(
-                children: [
-                  Icon(Icons.pets, color: Colors.grey.shade500,),
-                  const SizedBox(width: 10),
-                  const Text('Pet friendly'),
-                ],
-              )
+          children: [
+            Icon(Icons.pets, color: Colors.grey.shade500,),
+            const SizedBox(width: 10),
+            const Text('Pet friendly'),
+          ],
+        )
             : Container(),
-        roomie.preferences.smokingPreference == true
+        roomie.preferences!.smokingPreference == true
             ? Row(
-                children: [
-                  Icon(Icons.smoking_rooms, color: Colors.grey.shade500,),
-                  const SizedBox(width: 10),
-                  const Text('Smoker'),
-                ],
-              )
+          children: [
+            Icon(Icons.smoking_rooms, color: Colors.grey.shade500,),
+            const SizedBox(width: 10),
+            const Text('Smoker'),
+          ],
+        )
             : Container(),
         Row(
           children: [
             Icon(Icons.cleaning_services, color: Colors.grey.shade500,),
             const SizedBox(width: 10),
-            Expanded(child: Text('Cleaning habits: ${roomie.preferences.cleaningHabits}')),
+            Expanded(child: Text('Cleaning habits: ${roomie.preferences!.cleaningHabits}')),
           ],
         ),
         Row(
           children: [
             Icon(Icons.bedtime, color: Colors.grey.shade500,),
             const SizedBox(width: 10),
-            Expanded(child: Text('Sleeping habits: ${roomie.preferences.sleepingHabits}')),
+            Expanded(child: Text('Sleeping habits: ${roomie.preferences!.sleepingHabits}')),
           ],
         ),
         Row(
@@ -180,7 +180,7 @@ class RoomiePage extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                for (var hobby in roomie.preferences.hobbies)
+                for (var hobby in roomie.preferences!.hobbies)
                   Text("- $hobby"),
               ],
             ),
@@ -188,11 +188,11 @@ class RoomiePage extends StatelessWidget {
         ),
         Row(
           children: [
-            roomie.preferences.genderPreference == "male"
+            roomie.preferences!.genderPreference == "male"
                 ? const Icon(Icons.male, color: Colors.blue,)
                 : const Icon(Icons.female, color: Colors.pink,),
             const SizedBox(width: 15),
-            roomie.preferences.genderPreference == "male"
+            roomie.preferences!.genderPreference == "male"
                 ? const Text("Roomie gender preference: Male")
                 : const Text("Roomie gender preference: Female"),
           ],

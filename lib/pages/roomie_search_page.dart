@@ -53,7 +53,7 @@ class _RoomieSearchState extends State<RoomieSearch> {
     if (search.isNotEmpty) {
       setState(() {
         filteredRoomies = allRoomies
-            .where((roomie) => roomie.preferences.locationPreference
+            .where((roomie) => roomie.preferences!.locationPreference
             .toLowerCase()
             .contains(search.toLowerCase()))
             .toList();
@@ -74,8 +74,8 @@ class _RoomieSearchState extends State<RoomieSearch> {
             !filterStudent || roomie.occupation == "Student";
         bool matchesProfessional =
             !filterProfessional || roomie.occupation != "Student";
-        bool matchesPets = !filterPets || roomie.preferences.petFriendly == true;
-        bool matchesNonSmoker = !filterNonSmoker || roomie.preferences.smokingPreference == false;
+        bool matchesPets = !filterPets || roomie.preferences!.petFriendly == true;
+        bool matchesNonSmoker = !filterNonSmoker || roomie.preferences!.smokingPreference == false;
 
         return matchesStudent &&
             matchesProfessional &&
@@ -130,19 +130,19 @@ class _RoomieSearchState extends State<RoomieSearch> {
           // roomies list
           showSectionRoomies ?
           Expanded(
-                  child: filteredRoomies.isNotEmpty
-                      ? ListView.builder(
-                          itemCount: filteredRoomies.length,
-                          itemBuilder: (context, index) {
-                            final roomie = filteredRoomies[index];
-                            return RoomieTile(roomie: roomie);
-                          },
-                        )
-                      : const Center(
-                          // child: CircularProgressIndicator(),
-                          child: Text("No roomies available"),
-                        ),
-                )
+            child: filteredRoomies.isNotEmpty
+                ? ListView.builder(
+              itemCount: filteredRoomies.length,
+              itemBuilder: (context, index) {
+                final roomie = filteredRoomies[index];
+                return RoomieTile(roomie: roomie);
+              },
+            )
+                : const Center(
+              // child: CircularProgressIndicator(),
+              child: Text("No roomies available"),
+            ),
+          )
               : Container(),
         ],
       ),
