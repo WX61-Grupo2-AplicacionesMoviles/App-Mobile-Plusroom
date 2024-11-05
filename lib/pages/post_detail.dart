@@ -51,8 +51,12 @@ class PostDetail extends StatelessWidget {
                 minimumSize: Size(180, 40),
               ),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AuthorProfile()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AuthorProfile(landlordId: post.landlordId),
+                  ),
+                );
               },
               child: Text("Go to Landlord profile"),
             ),
