@@ -3,8 +3,8 @@ import '../../models/Post.dart';
 
 class PropertyList extends StatelessWidget {
   final List<Post> properties;
-  final VoidCallback onDetailsPressed;
   final Future<void> Function() onRefresh;
+  final Function(Post) onDetailsPressed;
 
   const PropertyList({
     super.key,
@@ -93,7 +93,7 @@ class PropertyList extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
-                      onPressed: onDetailsPressed,
+                      onPressed: () => onDetailsPressed(property),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF002C3E),
                         foregroundColor: Colors.white,

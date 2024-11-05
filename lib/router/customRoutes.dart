@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/init_view.dart';
 import 'package:app_mobile_plusroom/ui-profile/profile_view.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/welcome_view.dart';
+import '../pages/post_detail.dart';
 import '../ui-initial-section/login_view.dart';
 import '../ui-initial-section/register_view.dart';
 

@@ -9,6 +9,7 @@ import '../../models/Post.dart';
 import '../components/filter_roomie_button.dart';
 import '../components/roomie_tile.dart';
 import '../models/roomie.dart';
+import '../pages/post_detail.dart';
 import '../services/roomie_service.dart';
 
 class PropertiesPage extends StatefulWidget {
@@ -142,6 +143,7 @@ class _PropertiesPageState extends State<PropertiesPage>
 
   @override
   Widget build(BuildContext context) {
+    print('Building PropertiesPage');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Search', style: TextStyle(color: Color(0xFF064789))),
@@ -173,7 +175,12 @@ class _PropertiesPageState extends State<PropertiesPage>
       ),
     );
   }
-
+  void _navigateToPostDetail(Post post) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => PostDetail(post: post)),
+    );
+  }
   Widget _buildPropertiesBody() {
     return Column(
       children: [
@@ -190,7 +197,10 @@ class _PropertiesPageState extends State<PropertiesPage>
         Expanded(
           child: PropertyList(
             properties: filteredProperties,
-            onDetailsPressed: () {},
+            onDetailsPressed: (post) {
+              // Mueve la navegación a un lugar fuera del método build
+              _navigateToPostDetail(post);
+            },
             onRefresh: fetchProperties,
           ),
         ),
