@@ -3,8 +3,8 @@ import 'package:app_mobile_plusroom/example_pages/example_pages.dart';
 import 'package:app_mobile_plusroom/properties-searching/search-page.dart';
 import 'package:app_mobile_plusroom/ui-profile/profile_view.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/welcome_view.dart';
-import 'package:app_mobile_plusroom/properties-searching/ui/post-ui/make_post.dart'; // Importamos MakePost
-import 'package:app_mobile_plusroom/properties-searching/ui/post-ui/list_posts.dart'; // Importamos ListPosts
+import 'package:app_mobile_plusroom/properties-searching/ui/post-ui/make_post.dart';
+import 'package:app_mobile_plusroom/properties-searching/ui/post-ui/list_posts.dart';
 
 class BottomNavBar extends StatefulWidget {
   static String id = 'nav_bar';

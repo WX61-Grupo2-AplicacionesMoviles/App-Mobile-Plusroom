@@ -4,7 +4,7 @@ import 'package:app_mobile_plusroom/models/Post.dart';
 import 'package:app_mobile_plusroom/properties-searching/ui/post-ui/list_posts.dart';
 
 class MakePost extends StatefulWidget {
-  static const id = 'MakePost'; // Definimos un id estático
+  static const id = 'MakePost';
   @override
   _MakePostState createState() => _MakePostState();
 }

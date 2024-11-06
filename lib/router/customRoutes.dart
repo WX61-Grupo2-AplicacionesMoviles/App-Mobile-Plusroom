@@ -15,6 +15,6 @@ var customRoutes = <String, WidgetBuilder>{
   WelcomeView.id: (_) => const WelcomeView(userId: 1),
   ProfileView.id: (context) => ProfileView(userId: 1),
   BottomNavBar.id: (context) => BottomNavBar(userId: 1),
-  MakePost.id: (context) => MakePost(), // Usamos MakePost.id en lugar de 'MakePost'
-  ListPosts.id: (context) => ListPosts(), // Usamos ListPosts.id en lugar de 'ListPosts'
+  MakePost.id: (context) => MakePost(),
+  ListPosts.id: (context) => ListPosts(),
 };
