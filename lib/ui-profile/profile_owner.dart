@@ -55,92 +55,94 @@ class _ProfileOwnerState extends State<ProfileOwner> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      body: Center(
-        child: userProfile == null
-            ? errorMessage != null
-            ? Text(errorMessage!)
-            : CircularProgressIndicator()
-            : Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: AssetImage('lib/assets/img_profile.png'),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    (userProfile!['name'] ?? '') + ' ' + (userProfile!['lastName'] ?? ''),
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15.0),
-              child: FractionallySizedBox(
-                widthFactor: 0.9,
+      body: SingleChildScrollView(
+        child: Center(
+          child: userProfile == null
+              ? errorMessage != null
+              ? Text(errorMessage!)
+              : CircularProgressIndicator()
+              : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    cardInfo(context, userProfile!['name'] ?? '', 'Name'),
-                    cardInfo(context, userProfile!['lastName'] ?? '', 'Last Name'),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        cardInfo(context, userProfile!['age']?.toString() ?? '', 'Age'),
-                        cardInfo(context, userProfile!['gender'] ?? '', 'Gender'),
-                      ],
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundImage: AssetImage('lib/assets/img_profile.png'),
                     ),
-                    cardInfo(context, userProfile!['email'] ?? '', 'Email'),
-                    cardInfo(context, userProfile!['description'] ?? '', 'Description'),
-                    Container(
-                      margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-                      child: FractionallySizedBox(
-                        widthFactor: 0.5,
-                        child: buttonApp(
-                          "Edit Profile",
-                              () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditProfileOwner(landlordId: widget.landlordId),
-                              ),
-                            );
-                          },
-                        ),
+                    SizedBox(height: 10),
+                    Text(
+                      (userProfile!['name'] ?? '') + ' ' + (userProfile!['lastName'] ?? ''),
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            // Navigate to Posts
-                          },
-                          child: Text('Posts'),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            // Navigate to Clients
-                          },
-                          child: Text('Clients'),
-                        ),
-                      ],
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15.0),
+                child: FractionallySizedBox(
+                  widthFactor: 0.9,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      cardInfo(context, userProfile!['name'] ?? '', 'Name'),
+                      cardInfo(context, userProfile!['lastName'] ?? '', 'Last Name'),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          cardInfo(context, userProfile!['age']?.toString() ?? '', 'Age'),
+                          cardInfo(context, userProfile!['gender'] ?? '', 'Gender'),
+                        ],
+                      ),
+                      cardInfo(context, userProfile!['email'] ?? '', 'Email'),
+                      cardInfo(context, userProfile!['description'] ?? '', 'Description'),
+                      Container(
+                        margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+                        child: FractionallySizedBox(
+                          widthFactor: 0.5,
+                          child: buttonApp(
+                            "Edit Profile",
+                                () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EditProfileOwner(landlordId: widget.landlordId),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              // Navigate to Posts
+                            },
+                            child: Text('Posts'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              // Navigate to Clients
+                            },
+                            child: Text('Clients'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
