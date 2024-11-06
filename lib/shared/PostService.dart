@@ -35,14 +35,14 @@ class PostService {
           'title': post.title,
           'description': post.description,
           'location': post.location,
-          'price': post.price, // Asegúrate de que sea un número
+          'price': post.price,
           'category': post.category,
           'urlPhoto': post.urlPhoto,
-          'available': post.available, // Debe ser un booleano
+          'available': post.available,
           'rooms': post.rooms,
           'bathrooms': post.bathrooms,
-          'pets': post.pets, // Debe ser un booleano
-          'smoking': post.smoking, // Debe ser un booleano
+          'pets': post.pets,
+          'smoking': post.smoking,
           'landlordId': post.landlordId
         }),
       );
@@ -57,4 +57,43 @@ class PostService {
     }
   }
 
+  // Método para actualizar una publicación existente
+  Future<void> updatePost(Post post) async {
+    final response = await http.put(
+      Uri.parse(apiUrl), // La URL base, sin el ID
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'id': post.id, // Asegúrate de incluir el ID en el cuerpo
+        'title': post.title,
+        'description': post.description,
+        'location': post.location,
+        'price': post.price,
+        'category': post.category,
+        'urlPhoto': post.urlPhoto,
+        'available': post.available,
+        'rooms': post.rooms,
+        'bathrooms': post.bathrooms,
+        'pets': post.pets,
+        'smoking': post.smoking,
+        'landlordId': post.landlordId,
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      print("Error al actualizar publicación. Código: ${response.statusCode}");
+      print("Cuerpo de la respuesta: ${response.body}");
+      throw Exception("Error ${response.statusCode}: No se pudo actualizar la publicación");
+    }
+  }
+
+  // Método para eliminar una publicación
+  Future<void> deletePost(int postId) async {
+    final response = await http.delete(Uri.parse('$apiUrl/$postId'));
+
+    if (response.statusCode != 200) {
+      print("Error al eliminar publicación. Código: ${response.statusCode}");
+      print("Cuerpo de la respuesta: ${response.body}");
+      throw Exception("Error ${response.statusCode}: No se pudo eliminar la publicación");
+    }
+  }
 }
