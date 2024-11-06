@@ -1,3 +1,4 @@
+// lib/ui-profile/edit_profile_roomie.dart
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -23,7 +24,6 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
   final TextEditingController _dniController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
-  final TextEditingController _occupationController = TextEditingController();
   final TextEditingController _photoController = TextEditingController();
   final TextEditingController _preferencesController = TextEditingController();
   final TextEditingController _hobbiesController = TextEditingController();
@@ -36,6 +36,7 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
   final TextEditingController _sleepingHabitsController = TextEditingController();
   bool _petFriendly = false;
   bool _smokingPreference = false;
+  String _selectedOccupation = 'Select an option';
 
   @override
   void initState() {
@@ -60,7 +61,10 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
           _dniController.text = userData['dni'] ?? '';
           _ageController.text = userData['age']?.toString() ?? '';
           _genderController.text = userData['gender'] ?? '';
-          _occupationController.text = userData['occupation'] ?? '';
+          _selectedOccupation = userData['occupation'] ?? 'Select an option';
+          if (!_occupationItems.contains(_selectedOccupation)) {
+            _selectedOccupation = 'Select an option';
+          }
           _searchRoomie = userData['searchRoomie'] ?? false;
           _photoController.text = userData['photo'] ?? '';
         });
@@ -115,7 +119,7 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
         'dni': _dniController.text,
         'age': int.parse(_ageController.text),
         'gender': _genderController.text,
-        'occupation': _occupationController.text,
+        'occupation': _selectedOccupation != 'Select an option' ? _selectedOccupation : '',
         'searchRoomie': _searchRoomie,
         'photo': _photoController.text,
       }),
@@ -211,6 +215,14 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
     }
   }
 
+  List<String> _occupationItems = [
+    'Select an option',
+    'Student',
+    'Professional',
+    'Unemployed',
+    'Other'
+  ];
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -286,9 +298,32 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                           controller: _genderController,
                           decoration: const InputDecoration(labelText: 'Gender'),
                         ),
-                        TextField(
-                          controller: _occupationController,
-                          decoration: const InputDecoration(labelText: 'Occupation'),
+                        Container(
+                          width: size.width * 0.90,
+                          height: 40,
+                          margin: const EdgeInsets.only(top: 20.0),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: DropdownButton<String>(
+                              value: _selectedOccupation,
+                              isExpanded: true,
+                              items: _occupationItems.map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  _selectedOccupation = newValue!;
+                                });
+                              },
+                            ),
+                          ),
                         ),
                         TextField(
                           controller: _photoController,
