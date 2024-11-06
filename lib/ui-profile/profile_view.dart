@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/shared/buttonApp.dart';
 import 'package:app_mobile_plusroom/ui-profile/edit_profile_roomie.dart';
+import 'package:app_mobile_plusroom/properties-searching/ui/post-ui/list_posts.dart';
+import 'package:app_mobile_plusroom/pages/clients/ui/list_clients.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -42,7 +44,8 @@ class _ProfileViewState extends State<ProfileView> {
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
-    } else if (response.statusCode == 404) {
+    } else
+    if (response.statusCode == 404) {
       throw Exception('Profile not found');
     } else {
       throw Exception('Error fetching profile data: ${response.statusCode}');
@@ -103,30 +106,64 @@ class _ProfileViewState extends State<ProfileView> {
                     cardInfo(context, userProfile!['email'], 'Email'),
                     cardInfo(context, userProfile!['dni'], 'DNI'),
                     cardInfo(context, userProfile!['description'], 'Description'),
+
+                    // Botones Edit Profile, Posts, y Clients
                     Container(
                       margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-                      child: FractionallySizedBox(
-                        widthFactor: 0.5,
-                        child: buttonApp(
-                          "Edit Profile",
-                              () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditProfileRoomie(userId: widget.userId),
-                              ),
-                            );
-                          },
-                        ),
+                      child: Column(
+                        children: [
+                          // Botón Edit Profile
+                          FractionallySizedBox(
+                            widthFactor: 0.5,
+                            child: buttonApp(
+                              "Edit Profile",
+                                  () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditProfileRoomie(userId: widget.userId),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+
+                          // Botón Posts
+                          FractionallySizedBox(
+                            widthFactor: 0.5,
+                            child: buttonApp(
+                              "Posts",
+                                  () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ListPosts(), // Navega a la lista de publicaciones
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+
+                          // Botón Clients
+                          FractionallySizedBox(
+                            widthFactor: 0.5,
+                            child: buttonApp(
+                              "Clients",
+                                  () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ListClients(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+
+                        ],
                       ),
-                    ),
-                    const SizedBox(height: 5),
-                    const FractionallySizedBox(
-                      widthFactor: 0.5,
-                    ),
-                    const SizedBox(height: 5),
-                    const FractionallySizedBox(
-                      widthFactor: 0.5,
                     ),
                   ],
                 ),
