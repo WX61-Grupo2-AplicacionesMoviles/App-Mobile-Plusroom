@@ -119,13 +119,22 @@ class _ProfileOwnerState extends State<ProfileOwner> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 5),
-                    const FractionallySizedBox(
-                      widthFactor: 0.5,
-                    ),
-                    const SizedBox(height: 5),
-                    const FractionallySizedBox(
-                      widthFactor: 0.5,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            // Navigate to Posts
+                          },
+                          child: Text('Posts'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            // Navigate to Clients
+                          },
+                          child: Text('Clients'),
+                        ),
+                      ],
                     ),
                   ],
                 ),
