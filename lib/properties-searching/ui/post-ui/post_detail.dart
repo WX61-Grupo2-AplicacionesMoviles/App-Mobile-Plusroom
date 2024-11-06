@@ -50,17 +50,18 @@ class _PostDetailState extends State<PostDetail> {
     );
 
     try {
-      await _postService.updatePost(updatedPost); // Este método deberá crearse en `PostService`
+      await _postService.updatePost(updatedPost);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Publicación actualizada con éxito')),
       );
-      Navigator.pop(context);
+      Navigator.pop(context, 'updated'); // Envía "updated" como resultado al regresar
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al actualizar la publicación: $e')),
       );
     }
   }
+
 
   Future<void> _deletePost() async {
     try {
