@@ -109,6 +109,9 @@ class _MakePostState extends State<MakePost> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white, backgroundColor: Color(0xFF064789), // Color del texto en blanco
+                ),
                 onPressed: _submitPost,
                 child: Text('Publicar'),
               ),

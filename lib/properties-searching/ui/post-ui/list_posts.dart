@@ -17,15 +17,14 @@ class _ListPostsState extends State<ListPosts> {
   @override
   void initState() {
     super.initState();
-    _postsFuture = _postService.getPosts(); // Cargamos los datos inicialmente
+    _postsFuture = _postService.getPosts();
   }
 
-  // Método para recargar los datos de publicaciones
   Future<void> _refreshPosts() async {
     setState(() {
-      _postsFuture = _postService.getPosts(); // Recargamos el Future
+      _postsFuture = _postService.getPosts();
     });
-    await _postsFuture; // Esperamos a que el Future se complete
+    await _postsFuture;
   }
 
   @override
@@ -35,7 +34,7 @@ class _ListPostsState extends State<ListPosts> {
         title: Text('Mis Publicaciones'),
       ),
       body: FutureBuilder<List<Post>>(
-        future: _postsFuture, // Usamos la variable _postsFuture
+        future: _postsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -45,25 +44,12 @@ class _ListPostsState extends State<ListPosts> {
             return Center(child: Text('No tienes publicaciones aún.'));
           } else {
             return RefreshIndicator(
-              onRefresh: _refreshPosts, // Llama al método de recarga cuando se hace scroll hacia abajo
+              onRefresh: _refreshPosts,
               child: ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   final post = snapshot.data![index];
-                  return GestureDetector(
-                    onTap: () async {
-                      // Esperamos el resultado de la pantalla de detalles
-                      final result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => PostDetail(post: post)),
-                      );
-                      // Si el resultado es "updated", recargamos los datos
-                      if (result == 'updated') {
-                        _refreshPosts(); // Recargamos los datos al volver de la edición
-                      }
-                    },
-                    child: PostTile(post: post),
-                  );
+                  return PostTile(post: post);
                 },
               ),
             );
