@@ -46,4 +46,20 @@ class Landlord {
       photo: json['photo'] ?? '',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'lastName': lastName,
+      'email': email,
+      'description': description,
+      'age': age,
+      'gender': gender,
+      'posts': posts.map((post) => post.toJson()).toList(),
+      'customers': customers,
+      'rating': rating,
+      'photo': photo,
+    };
+  }
 }

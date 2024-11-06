@@ -46,4 +46,22 @@ class Post {
       landlordId: json['landlordId'] as int? ?? 0,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'location': location,
+      'price': price,
+      'category': category,
+      'urlPhoto': urlPhoto,
+      'available': available,
+      'rooms': rooms,
+      'bathrooms': bathrooms,
+      'pets': pets,
+      'smoking': smoking,
+      'landlordId': landlordId,
+    };
+  }
 }
