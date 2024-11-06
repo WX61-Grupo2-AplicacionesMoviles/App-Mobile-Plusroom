@@ -64,122 +64,124 @@ class _ProfileViewState extends State<ProfileView> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      body: Center(
-        child: userProfile == null
-            ? errorMessage != null
-            ? Text(errorMessage!)
-            : CircularProgressIndicator()
-            : Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: AssetImage('lib/assets/img_profile.png'),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    userProfile!['name'] + ' ' + userProfile!['lastName'],
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15.0),
-              child: FractionallySizedBox(
-                widthFactor: 0.9,
+      body: SingleChildScrollView(
+        child: Center(
+          child: userProfile == null
+              ? errorMessage != null
+              ? Text(errorMessage!)
+              : CircularProgressIndicator()
+              : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    cardInfo(context, userProfile!['name'], 'Name'),
-                    cardInfo(context, userProfile!['lastName'], 'Last Name'),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        cardInfo(context, userProfile!['age'].toString(), 'Age'),
-                        cardInfo(context, userProfile!['gender'], 'Gender'),
-                      ],
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundImage: AssetImage('lib/assets/img_profile.png'),
                     ),
-                    cardInfo(context, userProfile!['email'], 'Email'),
-                    cardInfo(context, userProfile!['dni'], 'DNI'),
-                    cardInfo(context, userProfile!['description'], 'Description'),
-                    if (userProfile!['petFriendly'] == true)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 30.0, left: 20.0), // Increased top margin for petFriendly
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(Icons.pets),
-                            SizedBox(width: 8),
-                            Text(
-                              'Con mascotas',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
+                    SizedBox(height: 10),
+                    Text(
+                      userProfile!['name'] + ' ' + userProfile!['lastName'],
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
-                    if (userProfile!['smokingPreference'] == true)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15.0, left: 20.0, bottom: 15.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(Icons.smoking_rooms),
-                            SizedBox(width: 8),
-                            Text(
-                              'Fuma',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-                      child: FractionallySizedBox(
-                        widthFactor: 0.5,
-                        child: buttonApp(
-                          "Edit Profile",
-                              () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditProfileRoomie(tenantId: widget.tenantId),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    const FractionallySizedBox(
-                      widthFactor: 0.5,
-                    ),
-                    const SizedBox(height: 5),
-                    const FractionallySizedBox(
-                      widthFactor: 0.5,
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15.0),
+                child: FractionallySizedBox(
+                  widthFactor: 0.9,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      cardInfo(context, userProfile!['name'], 'Name'),
+                      cardInfo(context, userProfile!['lastName'], 'Last Name'),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          cardInfo(context, userProfile!['age'].toString(), 'Age'),
+                          cardInfo(context, userProfile!['gender'], 'Gender'),
+                        ],
+                      ),
+                      cardInfo(context, userProfile!['email'], 'Email'),
+                      cardInfo(context, userProfile!['dni'], 'DNI'),
+                      cardInfo(context, userProfile!['description'], 'Description'),
+                      if (userProfile!['petFriendly'] == true)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 30.0, left: 20.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.pets),
+                              SizedBox(width: 8),
+                              Text(
+                                'Con mascotas',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      if (userProfile!['smokingPreference'] == true)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15.0, left: 20.0, bottom: 15.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.smoking_rooms),
+                              SizedBox(width: 8),
+                              Text(
+                                'Fuma',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+                        child: FractionallySizedBox(
+                          widthFactor: 0.5,
+                          child: buttonApp(
+                            "Edit Profile",
+                                () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EditProfileRoomie(tenantId: widget.tenantId),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      const FractionallySizedBox(
+                        widthFactor: 0.5,
+                      ),
+                      const SizedBox(height: 5),
+                      const FractionallySizedBox(
+                        widthFactor: 0.5,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
