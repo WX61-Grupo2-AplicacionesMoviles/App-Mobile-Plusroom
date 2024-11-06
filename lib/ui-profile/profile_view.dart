@@ -1,3 +1,4 @@
+// lib/ui-profile/profile_view.dart
 import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/shared/buttonApp.dart';
 import 'package:app_mobile_plusroom/ui-profile/edit_profile_roomie.dart';
@@ -37,15 +38,23 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   Future<Map<String, dynamic>> fetchUserProfile(int tenantId) async {
-    final url = Uri.parse('https://easygoing-perception-production.up.railway.app/api/tenants/$tenantId');
-    final response = await http.get(url);
+    final userUrl = Uri.parse('https://easygoing-perception-production.up.railway.app/api/tenants/$tenantId');
+    final preferencesUrl = Uri.parse('https://easygoing-perception-production.up.railway.app/api/roomies/search/preferences?tenantId=$tenantId');
 
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else if (response.statusCode == 404) {
-      throw Exception('Profile not found');
+    final userResponse = await http.get(userUrl);
+    final preferencesResponse = await http.get(preferencesUrl);
+
+    if (userResponse.statusCode == 200 && preferencesResponse.statusCode == 200) {
+      final userData = jsonDecode(userResponse.body);
+      final preferencesData = jsonDecode(preferencesResponse.body);
+
+      return {
+        ...userData,
+        'petFriendly': preferencesData['petFriendly'],
+        'smokingPreference': preferencesData['smokingPreference'],
+      };
     } else {
-      throw Exception('Error fetching profile data: ${response.statusCode}');
+      throw Exception('Error fetching profile data');
     }
   }
 
@@ -103,6 +112,44 @@ class _ProfileViewState extends State<ProfileView> {
                     cardInfo(context, userProfile!['email'], 'Email'),
                     cardInfo(context, userProfile!['dni'], 'DNI'),
                     cardInfo(context, userProfile!['description'], 'Description'),
+                    if (userProfile!['petFriendly'] == true)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 30.0, left: 20.0), // Increased top margin for petFriendly
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(Icons.pets),
+                            SizedBox(width: 8),
+                            Text(
+                              'Con mascotas',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    if (userProfile!['smokingPreference'] == true)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15.0, left: 20.0, bottom: 15.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(Icons.smoking_rooms),
+                            SizedBox(width: 8),
+                            Text(
+                              'Fuma',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     Container(
                       margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
                       child: FractionallySizedBox(
@@ -157,8 +204,25 @@ class _ProfileViewState extends State<ProfileView> {
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.bold,
-              color: info.isNotEmpty ? Color.fromARGB(255, 12, 11, 11) : Colors.grey,
+              color: Colors.black,
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget infoText(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15.0, left: 20.0, bottom: 15.0),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
       ),

@@ -323,8 +323,11 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                                 decoration: const InputDecoration(labelText: 'Location Preference'),
                               ),
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  const Text('Pet Friendly'),
+                                  Icon(Icons.pets),
+                                  SizedBox(width: 8),
+                                  const Text('¿Tienes mascotas?'),
                                   Checkbox(
                                     value: _petFriendly,
                                     onChanged: (bool? value) {
@@ -336,8 +339,11 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                                 ],
                               ),
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  const Text('Smoking Preference'),
+                                  Icon(Icons.smoking_rooms),
+                                  SizedBox(width: 8),
+                                  const Text('¿Fumas?'),
                                   Checkbox(
                                     value: _smokingPreference,
                                     onChanged: (bool? value) {
