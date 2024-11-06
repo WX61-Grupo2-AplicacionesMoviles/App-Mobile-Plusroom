@@ -1,13 +1,16 @@
+import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/example_pages/example_pages.dart';
 import 'package:app_mobile_plusroom/properties-searching/search-page.dart';
-import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/ui-profile/profile_view.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/welcome_view.dart';
+import 'package:app_mobile_plusroom/properties-searching/ui/post-ui/make_post.dart'; // Importamos MakePost
+import 'package:app_mobile_plusroom/properties-searching/ui/post-ui/list_posts.dart'; // Importamos ListPosts
 
 class BottomNavBar extends StatefulWidget {
   static String id = 'nav_bar';
   final int initialIndex;
-  final int userId; // Add userId parameter
+  final int userId;
+
   const BottomNavBar({super.key, this.initialIndex = 0, required this.userId});
 
   @override
@@ -23,18 +26,25 @@ class _BottomNavBarState extends State<BottomNavBar> {
     super.initState();
     _currentIndex = widget.initialIndex;
     _pages = [
-      WelcomeView(userId: widget.userId), // Pass userId here
+      WelcomeView(userId: widget.userId),
       const PropertiesPage(),
-      const AddPropertyPage(),
+      const SizedBox(), // Placeholder para el botón "Add Post"
       const MessagesPage(),
       ProfileView(userId: widget.userId),
     ];
   }
 
   void _onTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
+    if (index == 2) { // Índice del botón "Add Post"
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MakePost()), // Navegamos a MakePost
+      );
+    } else {
+      setState(() {
+        _currentIndex = index;
+      });
+    }
   }
 
   @override
