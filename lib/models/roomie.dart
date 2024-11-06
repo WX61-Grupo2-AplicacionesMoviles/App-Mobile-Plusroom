@@ -49,6 +49,22 @@ class Preferences {
         "petFriendly: $petFriendly, smokingPreference: $smokingPreference, "
         "cleaningHabits: $cleaningHabits, sleepingHabits: $sleepingHabits}";
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'preferences': preferences,
+      'hobbies': hobbies,
+      'locationPreference': locationPreference,
+      'budget': budget,
+      'genderPreference': genderPreference,
+      'minAge': minAge,
+      'maxAge': maxAge,
+      'petFriendly': petFriendly,
+      'smokingPreference': smokingPreference,
+      'cleaningHabits': cleaningHabits,
+      'sleepingHabits': sleepingHabits,
+    };
+  }
 }
 
 class Tenant {
@@ -92,6 +108,22 @@ class Tenant {
       photo: data['photo'] ?? '',
       preferences: data['preferences'] != null ? Preferences.fromJson(data['preferences']) : null,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'lastName': lastName,
+      'email': email,
+      'description': description,
+      'dni': dni,
+      'age': age,
+      'gender': gender,
+      'occupation': occupation,
+      'photo': photo,
+      'preferences': preferences?.toJson(),
+    };
   }
 
   @override

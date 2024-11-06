@@ -73,8 +73,12 @@ class PostDetail extends StatelessWidget {
               ),
               onPressed: () {
                 try {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => RequestForm()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RequestForm(landlordId: post.landlordId),
+                    ),
+                  );
                 } catch (error) {
                   print('Error al navegar: $error');
                 }

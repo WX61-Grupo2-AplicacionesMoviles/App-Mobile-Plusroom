@@ -12,6 +12,7 @@ import '../models/roomie.dart';
 import '../pages/post_detail.dart';
 import '../services/roomie_service.dart';
 
+
 class PropertiesPage extends StatefulWidget {
   const PropertiesPage({super.key});
 
@@ -45,7 +46,7 @@ class _PropertiesPageState extends State<PropertiesPage>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
-      setState(() {}); // Forzar reconstrucción al cambiar de pestaña
+      setState(() {});
     });
     fetchProperties();
 
