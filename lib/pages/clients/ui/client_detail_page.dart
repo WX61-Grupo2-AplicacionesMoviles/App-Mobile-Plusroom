@@ -1,13 +1,12 @@
-import 'package:app_mobile_plusroom/components/profile_image.dart';
 import 'package:flutter/material.dart';
-import '../models/roomie.dart';
+import 'package:app_mobile_plusroom/models/roomie.dart';
 
-class RoomiePage extends StatelessWidget {
-  final Tenant roomie;
-
-  const RoomiePage({
+class ClientDetailPage extends StatelessWidget {
+  final Tenant client;
+  static const id = 'ClientDetailPage';
+  const ClientDetailPage({
     super.key,
-    required this.roomie,
+    required this.client,
   });
 
   @override
@@ -15,7 +14,7 @@ class RoomiePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Roomie profile'),
+        title: const Text('Client Profile'),
         backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
@@ -27,14 +26,19 @@ class RoomiePage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // user image
-                  roomie.photo.trim().isNotEmpty ? ProfileImage(roomiePhoto: roomie.photo, radius: 60.0,) : iconProfile(),
+                  // User image
+                  client.photo.trim().isNotEmpty
+                      ? CircleAvatar(
+                    radius: 60.0,
+                    backgroundImage: NetworkImage(client.photo),
+                  )
+                      : iconProfile(),
 
                   const SizedBox(height: 10),
 
-                  // user name
+                  // User name
                   Text(
-                    roomie.name,
+                    client.name,
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 22,
@@ -52,7 +56,7 @@ class RoomiePage extends StatelessWidget {
                 children: [
                   // Description box
                   Container(
-                    width: double.infinity, // full width
+                    width: double.infinity,
                     padding: const EdgeInsets.all(15.0),
                     decoration: BoxDecoration(
                       color: const Color(0xFFEBF2FA),
@@ -61,24 +65,20 @@ class RoomiePage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        roomieDetailInfo(),
+                        clientDetailInfo(),
                         const SizedBox(height: 10),
                         const Divider(color: Colors.grey, thickness: 1),
                         Text(
-                          roomie.description ?? "",
+                          client.description ?? "",
                         ),
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 25),
 
-
-                  const SizedBox(height: 25),
-
+                  // Send message button
                   Center(
-                    child: // send message
-                    TextButton(
+                    child: TextButton(
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.blue.shade900,
                         foregroundColor: Colors.white,
@@ -88,13 +88,7 @@ class RoomiePage extends StatelessWidget {
                         side: const BorderSide(color: Colors.white, width: 1),
                       ),
                       onPressed: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) => ChatPage(
-                        //         userName: roomie.name,
-                        //       ),
-                        //     ));
+                        // Implement messaging functionality or navigation to chat page here
                       },
                       child: const Text("Send message"),
                     ),
@@ -108,8 +102,7 @@ class RoomiePage extends StatelessWidget {
     );
   }
 
-
-  // icon for profile image
+  // Icon for profile image
   Widget iconProfile() {
     return const CircleAvatar(
       backgroundColor: Color(0xFF78BCC4),
@@ -118,40 +111,36 @@ class RoomiePage extends StatelessWidget {
     );
   }
 
-
-  Widget roomieDetailInfo() {
+  Widget clientDetailInfo() {
     return Column(
       children: [
         Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            roomie.occupation == "Student"
-                ? Icon(Icons.school, color: Colors.grey.shade500,)
-                : Icon(Icons.work, color: Colors.grey.shade500,),
+            Icon(client.occupation == "Student" ? Icons.school : Icons.work, color: Colors.grey.shade500),
             const SizedBox(width: 10),
-            Text(roomie.occupation)
+            Text(client.occupation),
           ],
         ),
         Row(
           children: [
-            Icon(Icons.cake, color: Colors.grey.shade500,),
+            Icon(Icons.cake, color: Colors.grey.shade500),
             const SizedBox(width: 10),
-            Text("${roomie.age}"),
+            Text("${client.age}"),
           ],
         ),
-        roomie.preferences!.petFriendly == true
+        client.preferences!.petFriendly
             ? Row(
           children: [
-            Icon(Icons.pets, color: Colors.grey.shade500,),
+            Icon(Icons.pets, color: Colors.grey.shade500),
             const SizedBox(width: 10),
             const Text('Pet friendly'),
           ],
         )
             : Container(),
-        roomie.preferences!.smokingPreference == true
+        client.preferences!.smokingPreference
             ? Row(
           children: [
-            Icon(Icons.smoking_rooms, color: Colors.grey.shade500,),
+            Icon(Icons.smoking_rooms, color: Colors.grey.shade500),
             const SizedBox(width: 10),
             const Text('Smoker'),
           ],
@@ -159,28 +148,28 @@ class RoomiePage extends StatelessWidget {
             : Container(),
         Row(
           children: [
-            Icon(Icons.cleaning_services, color: Colors.grey.shade500,),
+            Icon(Icons.cleaning_services, color: Colors.grey.shade500),
             const SizedBox(width: 10),
-            Expanded(child: Text('Cleaning habits: ${roomie.preferences!.cleaningHabits}')),
+            Expanded(child: Text('Cleaning habits: ${client.preferences?.cleaningHabits}')),
           ],
         ),
         Row(
           children: [
-            Icon(Icons.bedtime, color: Colors.grey.shade500,),
+            Icon(Icons.bedtime, color: Colors.grey.shade500),
             const SizedBox(width: 10),
-            Expanded(child: Text('Sleeping habits: ${roomie.preferences!.sleepingHabits}')),
+            Expanded(child: Text('Sleeping habits: ${client.preferences?.sleepingHabits}')),
           ],
         ),
         Row(
           children: [
-            Icon(Icons.category_rounded, color: Colors.grey.shade500,),
+            Icon(Icons.category_rounded, color: Colors.grey.shade500),
             const SizedBox(width: 10),
             const Text("Hobbies: "),
             const SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                for (var hobby in roomie.preferences!.hobbies)
+                for (var hobby in client.preferences!.hobbies)
                   Text("- $hobby"),
               ],
             ),
@@ -188,15 +177,12 @@ class RoomiePage extends StatelessWidget {
         ),
         Row(
           children: [
-            roomie.preferences!.genderPreference == "male"
-                ? const Icon(Icons.male, color: Colors.blue,)
-                : const Icon(Icons.female, color: Colors.pink,),
+            Icon(client.preferences?.genderPreference == "male" ? Icons.male : Icons.female,
+                color: client.preferences?.genderPreference == "male" ? Colors.blue : Colors.pink),
             const SizedBox(width: 15),
-            roomie.preferences!.genderPreference == "male"
-                ? const Text("Roomie gender preference: Male")
-                : const Text("Roomie gender preference: Female"),
+            Text("Roomie gender preference: ${client.preferences?.genderPreference == "male" ? "Male" : "Female"}"),
           ],
-        )
+        ),
       ],
     );
   }

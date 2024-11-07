@@ -4,6 +4,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:app_mobile_plusroom/ui-profile/edit_profile_owner.dart';
 
+import '../pages/clients/ui/list_clients.dart';
+import '../properties-searching/ui/post-ui/list_posts.dart';
+
 class ProfileOwner extends StatefulWidget {
   final int landlordId;
 
@@ -125,13 +128,19 @@ class _ProfileOwnerState extends State<ProfileOwner> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              // Navigate to Posts
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ListPosts()),
+                              );
                             },
                             child: Text('Posts'),
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              // Navigate to Clients
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ListClients()),
+                              );
                             },
                             child: Text('Clients'),
                           ),

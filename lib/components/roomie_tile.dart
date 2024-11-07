@@ -29,15 +29,15 @@ class RoomieTile extends StatelessWidget {
             // gender
             roomie.gender == "female"
                 ? const Icon(
-                    Icons.female,
-                    color: Colors.pink,
-                    size: 20,
-                  )
+              Icons.female,
+              color: Colors.pink,
+              size: 20,
+            )
                 : const Icon(
-                    Icons.male,
-                    color: Colors.blue,
-                    size: 20,
-                  ),
+              Icons.male,
+              color: Colors.blue,
+              size: 20,
+            ),
           ],
         ),
 
@@ -86,29 +86,29 @@ class RoomieTile extends StatelessWidget {
             Text(roomie.occupation)
           ],
         ),
-        roomie.preferences.petFriendly == true
+        roomie.preferences!.petFriendly == true
             ? const Row(
-                children: [
-                  Icon(Icons.pets),
-                  SizedBox(width: 5),
-                  Text('Pet friendly'),
-                ],
-              )
+          children: [
+            Icon(Icons.pets),
+            SizedBox(width: 5),
+            Text('Pet friendly'),
+          ],
+        )
             : Container(),
-        roomie.preferences.smokingPreference == true
+        roomie.preferences!.smokingPreference == true
             ? const Row(
-                children: [
-                  Icon(Icons.smoking_rooms),
-                  SizedBox(width: 5),
-                  Text('Smoker'),
-                ],
-              )
+          children: [
+            Icon(Icons.smoking_rooms),
+            SizedBox(width: 5),
+            Text('Smoker'),
+          ],
+        )
             : Container(),
         Row(
           children: [
             Icon(Icons.location_on),
             const SizedBox(width: 5),
-            Expanded(child: Text('${roomie.preferences.locationPreference}')),
+            Expanded(child: Text('${roomie.preferences!.locationPreference}')),
           ],
         ),
       ],

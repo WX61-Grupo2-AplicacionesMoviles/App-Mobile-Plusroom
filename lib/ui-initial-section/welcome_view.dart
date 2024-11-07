@@ -2,6 +2,7 @@ import 'package:app_mobile_plusroom/router/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/shared/buttonApp.dart';
 import 'package:app_mobile_plusroom/ui-profile/profile_view.dart';
+import '../pages/notification_list.dart';
 
 class WelcomeView extends StatelessWidget {
   final int? tenantId;
@@ -14,6 +15,19 @@ class WelcomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Home"),
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NotificationList()));
+            },
+            icon: Icon(Icons.notifications),
+          ),
+        ],
+      ),
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
