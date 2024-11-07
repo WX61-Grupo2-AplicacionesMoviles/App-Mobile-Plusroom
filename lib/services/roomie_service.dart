@@ -20,4 +20,21 @@ class RoomieService {
     }
   }
 
+  // get roomie preference by id
+  Future<Preferences?> getRoomiePreferenceById(Tenant tenant) async {
+    final response =
+    await http.get(Uri.parse("$apiUrl/roomies/search/preferences?tenantId=${tenant.id}"));
+
+    if (response.statusCode == 200) {
+      if (response.body.isNotEmpty) {
+        dynamic jsonData = json.decode(utf8.decode(response.bodyBytes));
+        return Preferences.fromJson(jsonData);
+      } else {
+        return null;
+      }
+    } else {
+      throw Exception('Error to get roomie preference data');
+    }
+  }
+
 }

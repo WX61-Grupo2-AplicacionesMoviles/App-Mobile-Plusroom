@@ -3,7 +3,7 @@ import 'package:app_mobile_plusroom/models/roomie.dart';
 
 class ClientDetailPage extends StatelessWidget {
   final Tenant client;
-
+  static const id = 'ClientDetailPage';
   const ClientDetailPage({
     super.key,
     required this.client,
@@ -128,7 +128,7 @@ class ClientDetailPage extends StatelessWidget {
             Text("${client.age}"),
           ],
         ),
-        client.preferences.petFriendly
+        client.preferences!.petFriendly
             ? Row(
           children: [
             Icon(Icons.pets, color: Colors.grey.shade500),
@@ -137,7 +137,7 @@ class ClientDetailPage extends StatelessWidget {
           ],
         )
             : Container(),
-        client.preferences.smokingPreference
+        client.preferences!.smokingPreference
             ? Row(
           children: [
             Icon(Icons.smoking_rooms, color: Colors.grey.shade500),
@@ -150,14 +150,14 @@ class ClientDetailPage extends StatelessWidget {
           children: [
             Icon(Icons.cleaning_services, color: Colors.grey.shade500),
             const SizedBox(width: 10),
-            Expanded(child: Text('Cleaning habits: ${client.preferences.cleaningHabits}')),
+            Expanded(child: Text('Cleaning habits: ${client.preferences?.cleaningHabits}')),
           ],
         ),
         Row(
           children: [
             Icon(Icons.bedtime, color: Colors.grey.shade500),
             const SizedBox(width: 10),
-            Expanded(child: Text('Sleeping habits: ${client.preferences.sleepingHabits}')),
+            Expanded(child: Text('Sleeping habits: ${client.preferences?.sleepingHabits}')),
           ],
         ),
         Row(
@@ -169,7 +169,7 @@ class ClientDetailPage extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                for (var hobby in client.preferences.hobbies)
+                for (var hobby in client.preferences!.hobbies)
                   Text("- $hobby"),
               ],
             ),
@@ -177,10 +177,10 @@ class ClientDetailPage extends StatelessWidget {
         ),
         Row(
           children: [
-            Icon(client.preferences.genderPreference == "male" ? Icons.male : Icons.female,
-                color: client.preferences.genderPreference == "male" ? Colors.blue : Colors.pink),
+            Icon(client.preferences?.genderPreference == "male" ? Icons.male : Icons.female,
+                color: client.preferences?.genderPreference == "male" ? Colors.blue : Colors.pink),
             const SizedBox(width: 15),
-            Text("Roomie gender preference: ${client.preferences.genderPreference == "male" ? "Male" : "Female"}"),
+            Text("Roomie gender preference: ${client.preferences?.genderPreference == "male" ? "Male" : "Female"}"),
           ],
         ),
       ],

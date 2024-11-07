@@ -98,12 +98,7 @@ class _ListClientsState extends State<ListClients> {
                               Center(
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ClientDetailPage(client: client),
-                                      ),
-                                    );
+                                    Navigator.pushNamed(context, ClientDetailPage.id, arguments: client);
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Color(0xFF002C3E), // Fondo color #002C3E
