@@ -40,24 +40,84 @@ class _ProfileViewState extends State<ProfileView> {
   Future<Map<String, dynamic>> fetchUserProfile(int tenantId) async {
     final userUrl = Uri.parse('https://easygoing-perception-production.up.railway.app/api/tenants/$tenantId');
     final preferencesUrl = Uri.parse('https://easygoing-perception-production.up.railway.app/api/roomies/search/preferences?tenantId=$tenantId');
+    final createPreferencesUrl = Uri.parse('https://easygoing-perception-production.up.railway.app/api/roomies/preferences?tenantId=$tenantId');
 
-    final userResponse = await http.get(userUrl);
-    final preferencesResponse = await http.get(preferencesUrl);
+    try {
+      final userResponse = await http.get(userUrl);
+      var preferencesResponse = await http.get(preferencesUrl);
 
-    if (userResponse.statusCode == 200 && preferencesResponse.statusCode == 200) {
-      final userData = jsonDecode(userResponse.body);
-      final preferencesData = jsonDecode(preferencesResponse.body);
+      print('User Response: ${userResponse.statusCode} - ${userResponse.body}');
+      print('Preferences Response: ${preferencesResponse.statusCode} - ${preferencesResponse.body}');
 
-      return {
-        ...userData,
-        'petFriendly': preferencesData['petFriendly'],
-        'smokingPreference': preferencesData['smokingPreference'],
-      };
-    } else {
-      throw Exception('Error fetching profile data');
+      if (userResponse.statusCode == 200) {
+        final userData = jsonDecode(userResponse.body);
+        Map<String, dynamic> preferencesData = {};
+
+        if (preferencesResponse.statusCode == 200 && preferencesResponse.body.isNotEmpty) {
+          preferencesData = jsonDecode(preferencesResponse.body);
+        } else if (preferencesResponse.statusCode == 404) {
+          // Create default preferences
+          preferencesResponse = await http.post(
+            createPreferencesUrl,
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(<String, dynamic>{
+              'preferences': [],
+              'hobbies': [],
+              'locationPreference': '',
+              'budget': 0,
+              'genderPreference': '',
+              'minAge': 0,
+              'maxAge': 0,
+              'petFriendly': false,
+              'smokingPreference': false,
+              'cleaningHabits': '',
+              'sleepingHabits': '',
+            }),
+          );
+
+          if (preferencesResponse.statusCode == 201) {
+            preferencesData = {
+              'preferences': [],
+              'hobbies': [],
+              'locationPreference': '',
+              'budget': 0,
+              'genderPreference': '',
+              'minAge': 0,
+              'maxAge': 0,
+              'petFriendly': false,
+              'smokingPreference': false,
+              'cleaningHabits': '',
+              'sleepingHabits': '',
+            };
+          } else {
+            throw Exception('Error creating default preferences');
+          }
+        }
+
+        return {
+          ...userData,
+          'preferences': preferencesData['preferences'],
+          'hobbies': preferencesData['hobbies'],
+          'locationPreference': preferencesData['locationPreference'],
+          'budget': preferencesData['budget'],
+          'genderPreference': preferencesData['genderPreference'],
+          'minAge': preferencesData['minAge'],
+          'maxAge': preferencesData['maxAge'],
+          'petFriendly': preferencesData['petFriendly'],
+          'smokingPreference': preferencesData['smokingPreference'],
+          'cleaningHabits': preferencesData['cleaningHabits'],
+          'sleepingHabits': preferencesData['sleepingHabits']
+        };
+      } else {
+        throw Exception('Error fetching profile data');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Error fetching profile data: $e');
     }
   }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
