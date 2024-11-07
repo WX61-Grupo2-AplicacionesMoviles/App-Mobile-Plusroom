@@ -27,17 +27,34 @@ class Preferences {
 
   factory Preferences.fromJson(Map<String, dynamic> map) {
     return Preferences(
-      preferences: List<String>.from(map['preferences']),
-      hobbies: List<String>.from(map['hobbies']),
-      locationPreference: map['locationPreference'],
-      budget: map['budget'],
-      genderPreference: map['genderPreference'],
-      minAge: map['minAge'],
-      maxAge: map['maxAge'],
-      petFriendly: map['petFriendly'],
-      smokingPreference: map['smokingPreference'],
-      cleaningHabits: map['cleaningHabits'],
-      sleepingHabits: map['sleepingHabits'],
+      preferences: List<String>.from(map['preferences'] ?? []),
+      hobbies: List<String>.from(map['hobbies'] ?? []),
+      locationPreference: map['locationPreference'] ?? '',
+      budget: map['budget'] ?? 0,
+      genderPreference: map['genderPreference'] ?? 'Any',
+      minAge: map['minAge'] ?? 18,
+      maxAge: map['maxAge'] ?? 99,
+      petFriendly: map['petFriendly'] ?? false,
+      smokingPreference: map['smokingPreference'] ?? false,
+      cleaningHabits: map['cleaningHabits'] ?? 'Unknown',
+      sleepingHabits: map['sleepingHabits'] ?? 'Unknown',
+    );
+  }
+
+  // Constructor vacío para cuando preferences no está presente en los datos
+  factory Preferences.empty() {
+    return Preferences(
+      preferences: [],
+      hobbies: [],
+      locationPreference: '',
+      budget: 0,
+      genderPreference: 'Any',
+      minAge: 18,
+      maxAge: 99,
+      petFriendly: false,
+      smokingPreference: false,
+      cleaningHabits: 'Unknown',
+      sleepingHabits: 'Unknown',
     );
   }
 }
@@ -71,17 +88,19 @@ class Tenant {
 
   factory Tenant.fromJson(Map<String, dynamic> data) {
     return Tenant(
-      id: data['id'],
-      name: data['name'],
-      lastName: data['lastName'],
-      email: data['email'],
-      description: data['description'],
-      dni: data['dni'],
-      age: data['age'],
-      gender: data['gender'],
-      occupation: data['occupation'],
-      photo: data['photo'],
-      preferences: Preferences.fromJson(data['preferences']),
+      id: data['id'] ?? 0,
+      name: data['name'] ?? 'Unknown',
+      lastName: data['lastName'] ?? 'Unknown',
+      email: data['email'] ?? 'No email',
+      description: data['description'] ?? 'No description',
+      dni: data['dni'] ?? 'No DNI',
+      age: data['age'] ?? 0,
+      gender: data['gender'] ?? 'Unknown',
+      occupation: data['occupation'] ?? 'Unknown',
+      photo: data['photo'] ?? '',
+      preferences: data.containsKey('preferences') && data['preferences'] != null
+          ? Preferences.fromJson(data['preferences'])
+          : Preferences.empty(), // Usa `Preferences.empty()` si falta `preferences`
     );
   }
 }

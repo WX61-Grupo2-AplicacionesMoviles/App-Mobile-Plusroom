@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Beautiful Apartment",
+    "description": "A cozy apartment in the city center.",
+    "price": 1500,
+    "imgUrl": "https://www.marthastewart.com/thmb/lxfu2-95SWCS0jwciHs1mkbsGUM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/modern-living-rooms-wb-1-bc45b0dc70e541f0ba40364ae6bd8421.jpg"
+  },
+  {
+    "title": "Modern House",
+    "description": "Spacious modern house in the suburbs.",
+    "price": 3000,
+    "imgUrl": "https://www.marthastewart.com/thmb/lxfu2-95SWCS0jwciHs1mkbsGUM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/modern-living-rooms-wb-1-bc45b0dc70e541f0ba40364ae6bd8421.jpg"
+  },
+  {
+    "title": "Luxury Villa",
+    "description": "A beautiful villa with ocean view.",
+    "price": 5000,
+    "imgUrl": "https://www.marthastewart.com/thmb/lxfu2-95SWCS0jwciHs1mkbsGUM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/modern-living-rooms-wb-1-bc45b0dc70e541f0ba40364ae6bd8421.jpg"
+  }
+]
