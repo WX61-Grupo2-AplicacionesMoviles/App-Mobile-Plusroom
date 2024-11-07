@@ -49,7 +49,6 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
     final String userUrl = 'https://easygoing-perception-production.up.railway.app/api/tenants/$tenantId';
     final String preferencesUrl = 'https://easygoing-perception-production.up.railway.app/api/roomies/search/preferences?tenantId=$tenantId';
 
-    try {
       final userResponse = await http.get(Uri.parse(userUrl));
       if (userResponse.statusCode == 200) {
         final userData = jsonDecode(userResponse.body);
@@ -96,12 +95,6 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
           SnackBar(content: Text('Error fetching preferences data: ${preferencesResponse.statusCode}')),
         );
       }
-    } catch (e) {
-      print('Error: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An error occurred while fetching data')),
-      );
-    }
   }
 
   Future<void> _updateUserData() async {
