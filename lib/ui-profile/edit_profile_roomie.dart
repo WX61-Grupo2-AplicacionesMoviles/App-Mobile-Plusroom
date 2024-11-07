@@ -1,3 +1,4 @@
+// lib/ui-profile/edit_profile_roomie.dart
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -5,9 +6,9 @@ import 'package:app_mobile_plusroom/shared/buttonApp.dart';
 import 'package:app_mobile_plusroom/router/routes.dart';
 
 class EditProfileRoomie extends StatefulWidget {
-  final int userId;
+  final int tenantId;
 
-  const EditProfileRoomie({super.key, required this.userId});
+  const EditProfileRoomie({super.key, required this.tenantId});
   static String id = 'edit_profile_roomie';
 
   @override
@@ -23,8 +24,19 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
   final TextEditingController _dniController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
-  final TextEditingController _occupationController = TextEditingController();
   final TextEditingController _photoController = TextEditingController();
+  final TextEditingController _preferencesController = TextEditingController();
+  final TextEditingController _hobbiesController = TextEditingController();
+  final TextEditingController _locationPreferenceController = TextEditingController();
+  final TextEditingController _budgetController = TextEditingController();
+  final TextEditingController _genderPreferenceController = TextEditingController();
+  final TextEditingController _minAgeController = TextEditingController();
+  final TextEditingController _maxAgeController = TextEditingController();
+  final TextEditingController _cleaningHabitsController = TextEditingController();
+  final TextEditingController _sleepingHabitsController = TextEditingController();
+  bool _petFriendly = false;
+  bool _smokingPreference = false;
+  String _selectedOccupation = 'Select an option';
 
   @override
   void initState() {
@@ -33,39 +45,69 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
   }
 
   Future<void> _fetchUserData() async {
-    final String userId = widget.userId.toString();
-    final String url = 'https://giving-perception-production.up.railway.app/api/tenants/$userId';
-    print('Fetching data from URL: $url');
+    final String tenantId = widget.tenantId.toString();
+    final String userUrl = 'https://easygoing-perception-production.up.railway.app/api/tenants/$tenantId';
+    final String preferencesUrl = 'https://easygoing-perception-production.up.railway.app/api/roomies/search/preferences?tenantId=$tenantId';
 
-    final response = await http.get(Uri.parse(url));
+    try {
+      final userResponse = await http.get(Uri.parse(userUrl));
+      if (userResponse.statusCode == 200) {
+        final userData = jsonDecode(userResponse.body);
+        setState(() {
+          _nameController.text = userData['name'] ?? '';
+          _lastNameController.text = userData['lastName'] ?? '';
+          _emailController.text = userData['email'] ?? '';
+          _descriptionController.text = userData['description'] ?? '';
+          _dniController.text = userData['dni'] ?? '';
+          _ageController.text = userData['age']?.toString() ?? '';
+          _genderController.text = userData['gender'] ?? '';
+          _selectedOccupation = userData['occupation'] ?? 'Select an option';
+          if (!_occupationItems.contains(_selectedOccupation)) {
+            _selectedOccupation = 'Select an option';
+          }
+          _searchRoomie = userData['searchRoomie'] ?? false;
+          _photoController.text = userData['photo'] ?? '';
+        });
+      } else {
+        print('Error fetching user data: ${userResponse.statusCode}');
+        print('Response body: ${userResponse.body}');
+      }
 
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      print('Parsed data: $data');
-      setState(() {
-        _nameController.text = data['name'] ?? '';
-        _lastNameController.text = data['lastName'] ?? '';
-        _emailController.text = data['email'] ?? '';
-        _descriptionController.text = data['description'] ?? '';
-        _dniController.text = data['dni'] ?? '';
-        _ageController.text = data['age']?.toString() ?? '';
-        _genderController.text = data['gender'] ?? '';
-        _occupationController.text = data['occupation'] ?? '';
-        _searchRoomie = data['searchRoomie'] ?? false;
-        _photoController.text = data['photo'] ?? '';
-      });
-    } else {
-      print('Error al cargar los datos del usuario: ${response.statusCode}');
+      final preferencesResponse = await http.get(Uri.parse(preferencesUrl));
+      if (preferencesResponse.statusCode == 200) {
+        final preferencesData = jsonDecode(preferencesResponse.body);
+        setState(() {
+          _preferencesController.text = preferencesData['preferences']?.join(', ') ?? '';
+          _hobbiesController.text = preferencesData['hobbies']?.join(', ') ?? '';
+          _locationPreferenceController.text = preferencesData['locationPreference'] ?? '';
+          _budgetController.text = preferencesData['budget']?.toString() ?? '';
+          _genderPreferenceController.text = preferencesData['genderPreference'] ?? '';
+          _minAgeController.text = preferencesData['minAge']?.toString() ?? '';
+          _maxAgeController.text = preferencesData['maxAge']?.toString() ?? '';
+          _petFriendly = preferencesData['petFriendly'] ?? false;
+          _smokingPreference = preferencesData['smokingPreference'] ?? false;
+          _cleaningHabitsController.text = preferencesData['cleaningHabits'] ?? '';
+          _sleepingHabitsController.text = preferencesData['sleepingHabits'] ?? '';
+        });
+      } else {
+        print('Error fetching preferences data: ${preferencesResponse.statusCode}');
+        print('Response body: ${preferencesResponse.body}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error fetching preferences data: ${preferencesResponse.statusCode}')),
+        );
+      }
+    } catch (e) {
+      print('Error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred while fetching data')),
+      );
     }
   }
 
   Future<void> _updateUserData() async {
-    final String userId = widget.userId.toString();
+    final String tenantId = widget.tenantId.toString();
     final response = await http.put(
-      Uri.parse('https://giving-perception-production.up.railway.app/api/tenants/$userId'),
+      Uri.parse('https://easygoing-perception-production.up.railway.app/api/tenants/$tenantId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -77,7 +119,7 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
         'dni': _dniController.text,
         'age': int.parse(_ageController.text),
         'gender': _genderController.text,
-        'occupation': _occupationController.text,
+        'occupation': _selectedOccupation != 'Select an option' ? _selectedOccupation : '',
         'searchRoomie': _searchRoomie,
         'photo': _photoController.text,
       }),
@@ -90,6 +132,96 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
       print('Response body: ${response.body}');
     }
   }
+
+  Future<void> _saveRoomiePreferences() async {
+    final String preferencesUrl = 'https://easygoing-perception-production.up.railway.app/api/roomies/preferences?tenantId=${widget.tenantId}';
+
+    try {
+      // First, try to update the preferences
+      var response = await http.put(
+        Uri.parse(preferencesUrl),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'preferences': _preferencesController.text.split(', '),
+          'hobbies': _hobbiesController.text.split(', '),
+          'locationPreference': _locationPreferenceController.text,
+          'budget': int.tryParse(_budgetController.text) ?? 0,
+          'genderPreference': _genderPreferenceController.text,
+          'minAge': int.tryParse(_minAgeController.text) ?? 0,
+          'maxAge': int.tryParse(_maxAgeController.text) ?? 0,
+          'petFriendly': _petFriendly,
+          'smokingPreference': _smokingPreference,
+          'cleaningHabits': _cleaningHabitsController.text,
+          'sleepingHabits': _sleepingHabitsController.text,
+        }),
+      );
+
+      // If the preferences do not exist, create them first
+      if (response.statusCode == 404) {
+        response = await http.post(
+          Uri.parse(preferencesUrl),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, dynamic>{
+            'preferences': [],
+            'hobbies': [],
+            'locationPreference': '',
+            'budget': 0,
+            'genderPreference': '',
+            'minAge': 0,
+            'maxAge': 0,
+            'petFriendly': false,
+            'smokingPreference': false,
+            'cleaningHabits': '',
+            'sleepingHabits': '',
+          }),
+        );
+
+        // After creating, try to update again
+        if (response.statusCode == 201) {
+          response = await http.put(
+            Uri.parse(preferencesUrl),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(<String, dynamic>{
+              'preferences': _preferencesController.text.split(', '),
+              'hobbies': _hobbiesController.text.split(', '),
+              'locationPreference': _locationPreferenceController.text,
+              'budget': int.tryParse(_budgetController.text) ?? 0,
+              'genderPreference': _genderPreferenceController.text,
+              'minAge': int.tryParse(_minAgeController.text) ?? 0,
+              'maxAge': int.tryParse(_maxAgeController.text) ?? 0,
+              'petFriendly': _petFriendly,
+              'smokingPreference': _smokingPreference,
+              'cleaningHabits': _cleaningHabitsController.text,
+              'sleepingHabits': _sleepingHabitsController.text,
+            }),
+          );
+        }
+      }
+
+      if (response.statusCode == 200) {
+        print('Roomie preferences updated successfully');
+      } else {
+        print('Error updating roomie preferences: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  List<String> _occupationItems = [
+    'Select an option',
+    'Student',
+    'Professional',
+    'Unemployed',
+    'Other'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -166,9 +298,32 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                           controller: _genderController,
                           decoration: const InputDecoration(labelText: 'Gender'),
                         ),
-                        TextField(
-                          controller: _occupationController,
-                          decoration: const InputDecoration(labelText: 'Occupation'),
+                        Container(
+                          width: size.width * 0.90,
+                          height: 40,
+                          margin: const EdgeInsets.only(top: 20.0),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: DropdownButton<String>(
+                              value: _selectedOccupation,
+                              isExpanded: true,
+                              items: _occupationItems.map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  _selectedOccupation = newValue!;
+                                });
+                              },
+                            ),
+                          ),
                         ),
                         TextField(
                           controller: _photoController,
@@ -194,6 +349,49 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                             ),
                           ],
                         ),
+                        Visibility(
+                          visible: _searchRoomie,
+                          child: Column(
+                            children: [
+                              TextField(
+                                controller: _locationPreferenceController,
+                                decoration: const InputDecoration(labelText: 'Location Preference'),
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.pets),
+                                  SizedBox(width: 8),
+                                  const Text('¿Tienes mascotas?'),
+                                  Checkbox(
+                                    value: _petFriendly,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        _petFriendly = value ?? false;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.smoking_rooms),
+                                  SizedBox(width: 8),
+                                  const Text('¿Fumas?'),
+                                  Checkbox(
+                                    value: _smokingPreference,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        _smokingPreference = value ?? false;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
                         Container(
                           margin: const EdgeInsets.only(bottom: 20.0),
                           child: FractionallySizedBox(
@@ -202,10 +400,13 @@ class _EditProfileRoomieState extends State<EditProfileRoomie> {
                               "Save",
                                   () async {
                                 await _updateUserData();
+                                if (_searchRoomie) {
+                                  await _saveRoomiePreferences();
+                                }
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => BottomNavBar(initialIndex: 4, userId: widget.userId),
+                                    builder: (context) => BottomNavBar(initialIndex: 4, tenantId: widget.tenantId),
                                   ),
                                 );
                               },

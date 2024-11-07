@@ -11,7 +11,7 @@ var customRoutes = <String, WidgetBuilder>{
   LoginView.id: (_) => const LoginView(),
   RegisterView.id: (_) => const RegisterView(),
   InitView.id: (_) => const InitView(),
-  WelcomeView.id: (_) => const WelcomeView(userId: 1),
-  ProfileView.id: (context) => ProfileView(userId: 1), // Proporciona un userId válido
-  BottomNavBar.id: (context) => BottomNavBar(userId: 1), // Proporciona un userId válido
+  WelcomeView.id: (_) => const WelcomeView(tenantId: 1, landlordId: 1), // Provide valid tenantId and landlordId
+  ProfileView.id: (context) => ProfileView(tenantId: 1), // Provide valid tenantId
+  BottomNavBar.id: (context) => BottomNavBar(tenantId: 1, landlordId: 1), // Provide valid tenantId and landlordId
 };
