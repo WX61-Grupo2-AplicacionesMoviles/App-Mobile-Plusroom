@@ -49,11 +49,10 @@ class _MakePostState extends State<MakePost> {
     }
   }
 
-  // Subir imagen al backend y obtener la URL
-  Future<String> _uploadImage(File imageFile) async {
+  // Subir imagen al backend asociada al `postId`
+  Future<String> _uploadImage(File imageFile, int postId) async {
     try {
-      final String imageUrl = await _mediaService.uploadImage(imageFile, 1); // Cambia el postId según corresponda
-      return imageUrl;
+      return await _mediaService.uploadImage(imageFile, postId);
     } catch (e) {
       throw Exception('Error al subir la imagen: $e');
     }
@@ -67,15 +66,7 @@ class _MakePostState extends State<MakePost> {
       });
 
       try {
-        // Verificar que se haya seleccionado una imagen
-        if (_selectedImage == null) {
-          throw Exception('Por favor, selecciona una imagen antes de publicar.');
-        }
-
-        // Subir la imagen al backend y obtener su URL
-        String imageUrl = await _uploadImage(_selectedImage!);
-
-        // Crear el objeto `Post`
+        // Crear la publicación con un valor predeterminado para `urlPhoto`
         final post = Post(
           id: 0,
           title: titleController.text,
@@ -83,7 +74,7 @@ class _MakePostState extends State<MakePost> {
           location: locationController.text,
           price: double.parse(priceController.text),
           category: selectedCategory ?? 'other', // Valor por defecto
-          urlPhoto: imageUrl, // La URL generada por el backend
+          urlPhoto: 'https://t3.ftcdn.net/jpg/08/57/81/74/360_F_857817431_QvW1YME2z5HVi74FLR0TFCGrdsRhcXA7.jpg', // Valor temporal
           available: true,
           rooms: 1,
           bathrooms: 1,
@@ -92,8 +83,32 @@ class _MakePostState extends State<MakePost> {
           landlordId: 1,
         );
 
-        // Guardar la publicación
-        await _postService.createPost(post);
+        // Crear la publicación en el backend
+        final createdPost = await _postService.createPost(post);
+
+        // Subir la imagen asociada al `postId` generado y actualizar la publicación
+        if (_selectedImage != null) {
+          final String imageUrl = await _uploadImage(_selectedImage!, createdPost.id);
+
+          final updatedPost = Post(
+            id: createdPost.id,
+            title: createdPost.title,
+            description: createdPost.description,
+            location: createdPost.location,
+            price: createdPost.price,
+            category: createdPost.category,
+            urlPhoto: imageUrl, // La URL generada por el backend
+            available: createdPost.available,
+            rooms: createdPost.rooms,
+            bathrooms: createdPost.bathrooms,
+            pets: createdPost.pets,
+            smoking: createdPost.smoking,
+            landlordId: createdPost.landlordId,
+          );
+
+          await _postService.updatePost(updatedPost);
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Publicación creada con éxito')),
         );
