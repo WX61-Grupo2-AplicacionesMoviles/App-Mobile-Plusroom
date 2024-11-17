@@ -29,15 +29,16 @@ class Post {
     required this.landlordId,
   });
 
+  // Constructor para crear un Post desde un JSON
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
       id: json['id'] as int? ?? 0,
-      title: json['title'] ?? '',
-      description: json['description'] ?? '',
-      location: json['location'] ?? '',
+      title: json['title'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      location: json['location'] as String? ?? '',
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
-      category: json['category'] ?? '',
-      urlPhoto: json['urlPhoto'] ?? '',
+      category: json['category'] as String? ?? '',
+      urlPhoto: json['urlPhoto'] as String? ?? '',
       available: json['available'] as bool? ?? false,
       rooms: json['rooms'] as int? ?? 0,
       bathrooms: json['bathrooms'] as int? ?? 0,
@@ -46,6 +47,8 @@ class Post {
       landlordId: json['landlordId'] as int? ?? 0,
     );
   }
+
+  // Método para convertir un Post a un JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
