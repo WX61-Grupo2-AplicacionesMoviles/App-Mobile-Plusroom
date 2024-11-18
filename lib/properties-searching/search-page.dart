@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:app_mobile_plusroom/models/landlord.dart';
 import 'package:app_mobile_plusroom/properties-searching/post-ui/filters.dart';
 import 'package:app_mobile_plusroom/properties-searching/post-ui/property_list.dart';
 import 'package:app_mobile_plusroom/properties-searching/post-ui/search_bar.dart';
@@ -11,6 +12,7 @@ import '../components/roomie_tile.dart';
 import '../models/roomie.dart';
 import '../pages/post_detail.dart';
 import '../services/roomie_service.dart';
+import 'package:http/http.dart' as http;
 
 
 class PropertiesPage extends StatefulWidget {
@@ -30,6 +32,8 @@ class _PropertiesPageState extends State<PropertiesPage>
   List<Post> filteredProperties = [];
   List<Tenant> roomies = [];
   List<Tenant> filteredRoomies = [];
+
+  List<Landlord> landlords = [];
 
   TextEditingController searchController = TextEditingController();
   String? selectedCategory;
@@ -52,6 +56,8 @@ class _PropertiesPageState extends State<PropertiesPage>
 
     // first load rommie data, then preferences
     _fetchRoomies().then((value) => findRoomiePreferences());
+
+    _fetchLandlords();
   }
   void _getRoomieJsonData() async {
     final String response = await rootBundle.loadString('lib/assets/db.json');
@@ -64,6 +70,20 @@ class _PropertiesPageState extends State<PropertiesPage>
       filteredRoomies = List.from(roomies); // Usa roomies como base de filteredRoomies
     });
   }
+
+  Future<void> _fetchLandlords() async {
+    final response = await http.get(Uri.parse('https://easygoing-perception-production.up.railway.app/api/landlords'));
+    if (response.statusCode == 200) {
+      List<dynamic> jsonData = json.decode(response.body);
+      setState(() {
+        landlords = jsonData.map((landlord) => Landlord.fromJson(landlord)).toList();
+      });
+
+    } else {
+      throw Exception('Error to get landlords data');
+    }
+  }
+
   Future<void> fetchProperties() async {
     try {
       final List<Post> posts = await _postService.getPosts();
@@ -216,12 +236,12 @@ class _PropertiesPageState extends State<PropertiesPage>
         Expanded(
           child: filteredRoomies.isNotEmpty
               ? ListView.builder(
-                  itemCount: filteredRoomies.length,
-                  itemBuilder: (context, index) {
-                    final roomie = filteredRoomies[index];
-                    return RoomieTile(roomie: roomie);
-                  },
-                )
+            itemCount: filteredRoomies.length,
+            itemBuilder: (context, index) {
+              final roomie = filteredRoomies[index];
+              return RoomieTile(roomie: roomie);
+            },
+          )
               : const Center(child: Text("No roomies available", style: TextStyle(fontSize: 18, color: Colors.red),)),
         ),
       ],

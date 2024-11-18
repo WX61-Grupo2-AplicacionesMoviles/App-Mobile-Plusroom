@@ -10,7 +10,7 @@ class Landlord {
   final String gender;
   final List<Post> posts;
   final List<int> customers;
-  final double rating;
+  double rating;
   final String photo;
 
   Landlord({

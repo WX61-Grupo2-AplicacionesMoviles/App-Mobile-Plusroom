@@ -1,11 +1,20 @@
 import 'package:app_mobile_plusroom/router/customRoutes.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/init_view.dart';
 import 'package:app_mobile_plusroom/pages/roomie_search_page.dart';
+import 'package:app_mobile_plusroom/ui-initial-section/welcome_view.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LandlordProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

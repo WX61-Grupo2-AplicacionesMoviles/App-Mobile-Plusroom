@@ -1,19 +1,25 @@
 import 'dart:convert';
 
+import 'package:app_mobile_plusroom/ui-initial-section/welcome_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import '../components/profile_image.dart';
 import '../components/text_item.dart';
 import '../models/landlord.dart';
 
-class AuthorProfile extends StatelessWidget {
+class AuthorProfile extends StatefulWidget {
   final int landlordId;
   const AuthorProfile({super.key, required this.landlordId});
 
+  @override
+  State<AuthorProfile> createState() => _AuthorProfileState();
+}
 
+class _AuthorProfileState extends State<AuthorProfile> {
   Future<Landlord> _fetchLandlord() async {
-    final response = await http.get(Uri.parse('https://easygoing-perception-production.up.railway.app/api/landlords/$landlordId'));
+    final response = await http.get(Uri.parse('https://easygoing-perception-production.up.railway.app/api/landlords/${widget.landlordId}'));
 
     if (response.statusCode == 200) {
       return Landlord.fromJson(jsonDecode(response.body));
@@ -21,8 +27,12 @@ class AuthorProfile extends StatelessWidget {
       throw Exception('Failed to load landlord');
     }
   }
+
   @override
   Widget build(BuildContext context) {
+    final landlordProvider = Provider.of<LandlordProvider>(context, listen: true);
+    final landlord = landlordProvider.landlords.firstWhere((l) => l.id == widget.landlordId);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Landlord Profile"),
@@ -98,36 +108,47 @@ class AuthorProfile extends StatelessWidget {
 
                         SizedBox(height: 20),
 
-                        Text(
-                          "Rate this landlord:",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(10.0),
-                          margin: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Colors.blue.shade900,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: RatingBar.builder(
-                            initialRating: snapshot.data!.rating ?? 0,
-                            minRating: 1,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                            itemBuilder: (context, _) => Icon(
-                              Icons.star,
-                              color: Colors.amber,
+
+                        Column(
+                          children: [
+                            Text(
+                              "Rate this landlord:",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                            onRatingUpdate: (rating) {
-                              print(rating);
-                            },
-                          ),
+                            Container(
+                              padding: const EdgeInsets.all(10.0),
+                              margin: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.blue.shade900,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: RatingBar.builder(
+                                  initialRating: landlord.rating,
+                                  minRating: 1,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                  itemBuilder: (context, _) => Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  onRatingUpdate: (rating) {
+                                    setState(() {
+                                      // Actualiza el rating en el provider
+                                      landlordProvider.updateRating(widget.landlordId, rating);
+                                    });
+                                    print("New Rating: $rating");
+                                  }
+                              ),
+                            ),
+                          ],
                         ),
+
+
                       ],
                     ),
                   ),
