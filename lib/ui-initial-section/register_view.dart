@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/login_view.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter/gestures.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Future<void> registerUser(Map<String, dynamic> userData) async {
   final url = Uri.parse('https://easygoing-perception-production.up.railway.app/api/tenants/createTenant');
@@ -14,10 +16,8 @@ Future<void> registerUser(Map<String, dynamic> userData) async {
   );
 
   if (response.statusCode == 200) {
-    // Registro exitoso
     print('Usuario registrado exitosamente');
   } else {
-    // Fallo en el registro
     print('Error al registrar usuario: ${response.statusCode}');
     print('Cuerpo de la respuesta: ${response.body}');
   }
@@ -36,6 +36,7 @@ class _RegisterViewState extends State<RegisterView> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _agreeToTerms = false;
 
   @override
   Widget build(BuildContext context) {
@@ -68,20 +69,72 @@ class _RegisterViewState extends State<RegisterView> {
                         child: formRegister(),
                       ),
                     ),
-                    const SizedBox(height: 10), // Added space
-                    const Text(
-                      'Al registrarte, aceptas nuestras Condiciones de uso y Politicas de privacidad',
-                      style: TextStyle(
-                        color: Color(0xFF454040),
-                        fontSize: 14,
-                      ),
-                      textAlign: TextAlign.center,
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Checkbox(
+                          value: _agreeToTerms,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              _agreeToTerms = value ?? false;
+                            });
+                          },
+                        ),
+                        Flexible(
+                          child: RichText(
+                            text: TextSpan(
+                              text: 'By registering, you agree to our ',
+                              style: const TextStyle(
+                                color: Color(0xFF454040),
+                                fontSize: 14,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: 'terms and conditions',
+                                  style: const TextStyle(
+                                    color: Colors.blue,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () async {
+                                      final Uri url = Uri.parse('https://www.freeprivacypolicy.com/live/141d55ef-a8ab-4854-86fd-4c7a19ba2490');
+                                      try {
+                                        if (!await launchUrl(
+                                          url,
+                                          mode: LaunchMode.externalApplication,
+                                        )) {
+                                          if (context.mounted) {
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              const SnackBar(
+                                                content: Text('No se pudo abrir los tÃ©rminos y condiciones'),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      } catch (e) {
+                                        if (context.mounted) {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text('Error: ${e.toString()}'),
+                                            ),
+                                          );
+                                        }
+                                      }
+                                    },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     haveAccount(context),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.6,
                       child: TextButton(
-                        onPressed: () async {
+                        onPressed: _agreeToTerms
+                            ? () async {
                           Map<String, dynamic> userData = {
                             'name': _nameController.text,
                             'lastName': _lastNameController.text,
@@ -97,7 +150,8 @@ class _RegisterViewState extends State<RegisterView> {
                           };
                           await registerUser(userData);
                           Navigator.pushNamed(context, LoginView.id);
-                        },
+                        }
+                            : null,
                         style: TextButton.styleFrom(
                           backgroundColor: const Color(0xFF427AA1),
                           padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
