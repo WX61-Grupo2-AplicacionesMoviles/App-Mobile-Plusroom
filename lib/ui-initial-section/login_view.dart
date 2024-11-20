@@ -1,3 +1,4 @@
+import 'package:app_mobile_plusroom/models/current_user.dart';
 import 'package:app_mobile_plusroom/router/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/register_view.dart';
@@ -39,6 +40,7 @@ class _LoginViewState extends State<LoginView> {
     if (tenantResponse.statusCode == 200) {
       final responseData = jsonDecode(tenantResponse.body);
       if (responseData is int) {
+        CurrentUser().setId(responseData);
         tenantId = responseData; // Store tenant ID
         print('Tenant authenticated successfully. ID: $tenantId');
         Navigator.pushReplacement(
@@ -66,6 +68,7 @@ class _LoginViewState extends State<LoginView> {
     if (landlordResponse.statusCode == 200) {
       final responseData = jsonDecode(landlordResponse.body);
       if (responseData is int) {
+        CurrentUser().setId(responseData);
         landlordId = responseData; // Store landlord ID
         print('Landlord authenticated successfully. ID: $landlordId');
         Navigator.pushReplacement(

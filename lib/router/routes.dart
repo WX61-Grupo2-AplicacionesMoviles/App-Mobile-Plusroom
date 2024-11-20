@@ -1,3 +1,4 @@
+import 'package:app_mobile_plusroom/pages/messages.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/example_pages/example_pages.dart';
 import 'package:app_mobile_plusroom/properties-searching/search-page.dart';
@@ -31,7 +32,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       WelcomeView(tenantId: widget.tenantId, landlordId: widget.landlordId),
       const PropertiesPage(),
       MakePost(),
-      const MessagesPage(),
+      const MessagesList(),
       if (widget.tenantId != null)
         ProfileView(tenantId: widget.tenantId!)
       else if (widget.landlordId != null)

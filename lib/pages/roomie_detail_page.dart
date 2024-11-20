@@ -1,4 +1,5 @@
 import 'package:app_mobile_plusroom/components/profile_image.dart';
+import 'package:app_mobile_plusroom/pages/send_message.dart';
 import 'package:flutter/material.dart';
 import '../models/roomie.dart';
 
@@ -77,8 +78,7 @@ class RoomiePage extends StatelessWidget {
                   const SizedBox(height: 25),
 
                   Center(
-                    child: // send message
-                    TextButton(
+                    child: TextButton(
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.blue.shade900,
                         foregroundColor: Colors.white,
@@ -88,13 +88,12 @@ class RoomiePage extends StatelessWidget {
                         side: const BorderSide(color: Colors.white, width: 1),
                       ),
                       onPressed: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) => ChatPage(
-                        //         userName: roomie.name,
-                        //       ),
-                        //     ));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SendMessage(userId: roomie.id),
+                          ),
+                        );
                       },
                       child: const Text("Send message"),
                     ),
