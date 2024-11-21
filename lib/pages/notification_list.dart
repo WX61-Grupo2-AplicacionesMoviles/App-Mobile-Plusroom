@@ -10,6 +10,7 @@ class NotificationList extends StatefulWidget {
 
 class _NotificationListState extends State<NotificationList> {
   List<Notification> _notifications = [];
+  List<bool> _isNotificationVisible = [];
   bool _isLoading = false;
 
   String _formatDateTime(String dateTime) {
@@ -84,6 +85,7 @@ class _NotificationListState extends State<NotificationList> {
           _notifications = (jsonData['listNotification'] as List)
               .map((notification) => Notification.fromJson(notification))
               .toList();
+          _isNotificationVisible = List<bool>.filled(_notifications.length, true);
           _isLoading = false;
         });
       } else {
@@ -115,6 +117,9 @@ class _NotificationListState extends State<NotificationList> {
           ? ListView.builder(
         itemCount: _notifications.length,
         itemBuilder: (context, index) {
+          if(!_isNotificationVisible[index]){
+            return SizedBox.shrink();
+          }
           return FutureBuilder(
             future: Future.wait([
               _getTenantNames(_notifications[index].tenantIds),
@@ -140,7 +145,6 @@ class _NotificationListState extends State<NotificationList> {
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 10),
-                        Text('Rental application'),
                         SizedBox(height: 10),
                         Text('Date: ${_formatDateTime(_notifications[index].date)}'),
                         Text('Users:'),
@@ -162,8 +166,12 @@ class _NotificationListState extends State<NotificationList> {
                                     borderRadius: BorderRadius.all(Radius.circular(5))),
                                 minimumSize: Size(100, 40),
                               ),
-                              onPressed: () {},
-                              child: Text("Aceptar"),
+                              onPressed: () {
+                                setState(() {
+                                  _isNotificationVisible[index] = false;
+                                });
+                              },
+                              child: Text("Accept"),
                             ),
                             SizedBox(width: 10),
                             TextButton(
@@ -174,8 +182,12 @@ class _NotificationListState extends State<NotificationList> {
                                     borderRadius: BorderRadius.all(Radius.circular(5))),
                                 minimumSize: Size(100, 40),
                               ),
-                              onPressed: () {},
-                              child: Text("Rechazar"),
+                              onPressed: () {
+                                setState(() {
+                                  _isNotificationVisible[index] = false;
+                                });
+                              },
+                              child: Text("Reject"),
                             ),
                           ],
                         ),
