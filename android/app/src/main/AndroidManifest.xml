@@ -1,5 +1,4 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-<<<<<<< HEAD
     <uses-permission android:name="android.permission.INTERNET" />
     <queries>
         <intent>
@@ -11,9 +10,6 @@
             <data android:scheme="https" />
         </intent>
     </queries>
-=======
-    <uses-permission android:name="android.permission.INTERNET"/>
->>>>>>> feature/profile
     <application
         android:label="Plusroom"
         android:name="${applicationName}"
