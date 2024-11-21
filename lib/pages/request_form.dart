@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
+import '../models/current_user.dart';
 import '../models/landlord.dart';
 import '../models/roomie.dart';
 import '../models/notification.dart';
@@ -10,10 +11,12 @@ import 'package:http/http.dart' as http;
 
 class RequestForm extends StatefulWidget {
   final int landlordId;
+  final int postId;
 
   const RequestForm({
     super.key,
     required this.landlordId,
+    required this.postId,
   });
 
   @override
@@ -34,6 +37,7 @@ class _RequestFormState extends State<RequestForm> {
   void initState() {
     super.initState();
     _getLandlord();
+    _getUserInfo();
   }
 
   Future<void> _getLandlord() async {
@@ -50,6 +54,28 @@ class _RequestFormState extends State<RequestForm> {
       });
     } else {
       throw Exception('Error al obtener datos del landlord');
+    }
+  }
+
+  Future<void> _getUserInfo() async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://easygoing-perception-production.up.railway.app/api/tenants/${CurrentUser().getId()}'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Tenant tenant = Tenant.fromJson(jsonDecode(response.body));
+        setState(() {
+          mainNameController.text = tenant.name;
+          mainEmailController.text = tenant.email;
+        });
+      } else {
+        throw Exception('Error al obtener datos del usuario');
+      }
+    } catch (e) {
     }
   }
   @override
@@ -130,7 +156,6 @@ class _RequestFormState extends State<RequestForm> {
 
                   SizedBox(height: 20),
 
-                  // create textfield email input -> number of people
                     if (selectedValue != null && selectedValue! > 0)
                       for (int i = 0; i < selectedValue!; i++)
                       Container(
@@ -157,8 +182,6 @@ class _RequestFormState extends State<RequestForm> {
                         minimumSize: Size(150, 40),
                       ),
                       onPressed: () async {
-                        List<Tenant> tenants = [];
-                        // Verificar que los campos estén llenos
                         if (mainNameController.text.isEmpty ||
                             mainEmailController.text.isEmpty ||
                             (selectedValue != null && selectedValue! > 0 &&
@@ -171,57 +194,83 @@ class _RequestFormState extends State<RequestForm> {
                         }
 
                         try {
-                          // Obtener la lista de roomies
-                          final List<Tenant> roomies = await _roomieService.getRoomies();
+                          List<int> tenantIds = [];
 
-                          // Busca el tenant principal
-                          Tenant? mainTenant = roomies.firstWhere((tenant) => tenant.email == mainEmailController.text);
-                          if (mainTenant != null) {
-                            tenants.add(mainTenant);
-                          }
-
-                          // Busca los tenants adicionales
-                          if (selectedValue != null && selectedValue! > 0) {
-                            for (int i = 0; i < selectedValue!; i++) {
-                              Tenant? tenant = roomies.firstWhere((tenant) => tenant.email == emailControllers[i].text);
-                              if (tenant != null) {
-                                tenants.add(tenant);
-                              }
-                            }
-                          }
-
-                      RentNotification notification = RentNotification(
-                        id: 0,
-                        tenants: tenants,
-                        landlord: _landlord!,
-                        postId: 0,
-                        date: DateTime.now(),
-                      );
-
-/*
-                          final response = await http.post(
-                            Uri.parse('https://easygoing-perception-production.up.railway.app/api/notifications'),
+                          final responseTenants = await http.get(
+                            Uri.parse('https://easygoing-perception-production.up.railway.app/api/tenants'),
                             headers: {
                               'Content-Type': 'application/json; charset=UTF-8',
                             },
-                            body: jsonEncode(notification.toJson()),
                           );
-                          print('Respuesta del servidor: ${response.statusCode} ${response.body}');
 
-                          if (response.statusCode == 200) {
-                            // Solicitud exitosa
-                            print('ta bien');
+                          if (responseTenants.statusCode == 200) {
+                            List<Tenant> tenants = (jsonDecode(responseTenants.body) as List)
+                                .map((tenant) => Tenant.fromJson(tenant))
+                                .toList();
+                            Tenant? mainTenant = tenants.firstWhere((tenant) => tenant.email == mainEmailController.text);
+                            if (mainTenant != null) {
+                              tenantIds.add(mainTenant.id);
+                            } else {
+                              const snackBar = SnackBar(
+                                content: Text('Email principal no encontrado'),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              return;
+                            }
+
+                            if (selectedValue != null && selectedValue! > 0) {
+                              for (int i = 0; i < selectedValue!; i++) {
+                                Tenant? additionalTenant = tenants.firstWhere((tenant) => tenant.email == emailControllers[i].text);
+                                if (additionalTenant != null) {
+                                  tenantIds.add(additionalTenant.id);
+                                } else {
+                                  const snackBar = SnackBar(
+                                    content: Text('Email adicional no encontrado'),
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                  return;
+                                }
+                              }
+                            }
+
+                            final notification = {
+                              "tenantIds": tenantIds,
+                              "landlordId": widget.landlordId,
+                              "postId": widget.postId,
+                              "date": DateTime.now().toIso8601String()
+                            };
+
+                            final response = await http.post(
+                              Uri.parse('https://easygoing-perception-production.up.railway.app/api/notifications'),
+                              headers: {
+                                'Content-Type': 'application/json; charset=UTF-8',
+                              },
+                              body: jsonEncode(notification),
+                            );
+
+                            print('StatusCode: ${response.statusCode}');
+                            print('Body: ${response.body}');
+
+                            if (response.statusCode == 200) {
+                              const snackBar = SnackBar(
+                                content: Text('Request sent'),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              Navigator.pop(context);
+                            } else {
+                              const snackBar = SnackBar(
+                                content: Text('Error al enviar solicitud'),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            }
                           } else {
-                            // Error en la solicitud
-                            print('Error: ${response.statusCode} ${response.reasonPhrase}');
+                            const snackBar = SnackBar(
+                              content: Text('Error al obtener tenants'),
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
                           }
-*/
-                          const snackBar = SnackBar(
-                            content: Text('Request sent'),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          Navigator.pop(context);
                         } catch (e) {
+                          print('Error al enviar solicitud: $e');
                           const snackBar = SnackBar(
                             content: Text('Error al enviar solicitud'),
                           );

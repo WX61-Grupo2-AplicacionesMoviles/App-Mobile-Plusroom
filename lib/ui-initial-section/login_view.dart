@@ -41,6 +41,7 @@ class _LoginViewState extends State<LoginView> {
       final responseData = jsonDecode(tenantResponse.body);
       if (responseData is int) {
         CurrentUser().setId(responseData);
+        CurrentUser().setRole('tenant');
         tenantId = responseData; // Store tenant ID
         print('Tenant authenticated successfully. ID: $tenantId');
         Navigator.pushReplacement(
@@ -69,6 +70,7 @@ class _LoginViewState extends State<LoginView> {
       final responseData = jsonDecode(landlordResponse.body);
       if (responseData is int) {
         CurrentUser().setId(responseData);
+        CurrentUser().setRole('landlord');
         landlordId = responseData; // Store landlord ID
         print('Landlord authenticated successfully. ID: $landlordId');
         Navigator.pushReplacement(
