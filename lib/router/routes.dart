@@ -1,4 +1,3 @@
-import 'package:app_mobile_plusroom/ui-initial-section/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/example_pages/example_pages.dart';
 import 'package:app_mobile_plusroom/properties-searching/search-page.dart';
@@ -7,6 +6,9 @@ import 'package:app_mobile_plusroom/ui-profile/profile_owner.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/welcome_view.dart';
 import 'package:app_mobile_plusroom/properties-searching/ui/post-ui/make_post.dart';
 import 'package:provider/provider.dart';
+
+import '../pages/messages.dart';
+import '../ui-initial-section/login_view.dart';
 
 class BottomNavBar extends StatefulWidget {
   static String id = 'nav_bar';
@@ -44,13 +46,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
       WelcomeView(tenantId: widget.tenantId, landlordId: widget.landlordId),
       const PropertiesPage(),
       if (userTypeProvider.isLandlord) MakePost(),
-      const MessagesPage(),
+      const MessagesList(),
       if (widget.tenantId != null)
         ProfileView(tenantId: widget.tenantId!)
       else if (widget.landlordId != null)
         ProfileOwner(landlordId: widget.landlordId!)
     ];
-
     return Scaffold(
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
