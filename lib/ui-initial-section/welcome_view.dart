@@ -226,7 +226,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                         );
                       }).toList() ,
                       options: CarouselOptions(
-                          height: 230,
+                          height: 250,
                           viewportFraction: 1,
                           autoPlay: true,
                           aspectRatio: 2.0,

@@ -1,3 +1,4 @@
+import 'package:app_mobile_plusroom/ui-initial-section/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/shared/buttonApp.dart';
 import 'package:http/http.dart' as http;
@@ -145,6 +146,23 @@ class _ProfileOwnerState extends State<ProfileOwner> {
                             child: Text('Clients'),
                           ),
                         ],
+                      ),
+                      //logout
+                      Container(
+                        margin: const EdgeInsets.only(top: 20.0),
+                        child: Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => LoginView(),
+                                      ),
+                                    );
+                                  },
+                            child: Text('Logout'),
+                          ),
+                        ),
                       ),
                     ],
                   ),

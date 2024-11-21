@@ -31,6 +31,7 @@ class _MessagesListState extends State<MessagesList> {
             onPressed: () {},
           ),
         ],
+        automaticallyImplyLeading: false,
       ),
       body: FutureBuilder(
         future: _mensajesFuture,

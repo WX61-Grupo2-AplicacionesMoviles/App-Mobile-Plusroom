@@ -121,7 +121,7 @@ class _MakePostState extends State<MakePost> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Crear Publicación')),
+      appBar: AppBar(title: Text('Crear Publicación'), automaticallyImplyLeading: false,),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : Padding(

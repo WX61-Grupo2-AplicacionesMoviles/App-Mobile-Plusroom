@@ -170,6 +170,7 @@ class _PropertiesPageState extends State<PropertiesPage>
         title: const Text('Search', style: TextStyle(color: Color(0xFF064789))),
         iconTheme: const IconThemeData(color: Color(0xFF064789)),
         backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         children: [
