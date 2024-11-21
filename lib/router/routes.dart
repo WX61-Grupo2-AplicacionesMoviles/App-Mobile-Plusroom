@@ -1,3 +1,4 @@
+import 'package:app_mobile_plusroom/ui-initial-section/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mobile_plusroom/example_pages/example_pages.dart';
 import 'package:app_mobile_plusroom/properties-searching/search-page.dart';
@@ -5,7 +6,7 @@ import 'package:app_mobile_plusroom/ui-profile/profile_view.dart';
 import 'package:app_mobile_plusroom/ui-profile/profile_owner.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/welcome_view.dart';
 import 'package:app_mobile_plusroom/properties-searching/ui/post-ui/make_post.dart';
-import 'package:app_mobile_plusroom/properties-searching/ui/post-ui/list_posts.dart';
+import 'package:provider/provider.dart';
 
 class BottomNavBar extends StatefulWidget {
   static String id = 'nav_bar';
@@ -27,16 +28,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
   void initState() {
     super.initState();
     _currentIndex = widget.initialIndex;
-    _pages = [
-      WelcomeView(tenantId: widget.tenantId, landlordId: widget.landlordId),
-      const PropertiesPage(),
-      MakePost(),
-      const MessagesPage(),
-      if (widget.tenantId != null)
-        ProfileView(tenantId: widget.tenantId!)
-      else if (widget.landlordId != null)
-        ProfileOwner(landlordId: widget.landlordId!)
-    ];
   }
 
   void _onTap(int index) {
@@ -47,6 +38,19 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    final userTypeProvider = Provider.of<UserTypeProvider>(context);
+
+    final List<Widget> _pages = [
+      WelcomeView(tenantId: widget.tenantId, landlordId: widget.landlordId),
+      const PropertiesPage(),
+      if (userTypeProvider.isLandlord) MakePost(),
+      const MessagesPage(),
+      if (widget.tenantId != null)
+        ProfileView(tenantId: widget.tenantId!)
+      else if (widget.landlordId != null)
+        ProfileOwner(landlordId: widget.landlordId!)
+    ];
+
     return Scaffold(
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -66,23 +70,24 @@ class _BottomNavBarState extends State<BottomNavBar> {
             icon: Icon(Icons.search),
             label: 'Search',
           ),
-          BottomNavigationBarItem(
-            icon: Container(
-              width: 60.0,
-              height: 35.0,
-              decoration: BoxDecoration(
-                color: const Color(0xFF064789),
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: const Center(
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
+          if(userTypeProvider.isLandlord)
+            BottomNavigationBarItem(
+              icon: Container(
+                width: 60.0,
+                height: 35.0,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF064789),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: const Center(
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
                 ),
               ),
+              label: 'Add Post',
             ),
-            label: 'Add Post',
-          ),
           const BottomNavigationBarItem(
             icon: Icon(Icons.message),
             label: 'Messages',

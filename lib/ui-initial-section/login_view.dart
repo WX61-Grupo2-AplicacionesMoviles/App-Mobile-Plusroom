@@ -46,7 +46,6 @@ class _LoginViewState extends State<LoginView> {
         // Set the user type as "tenant"
         Provider.of<UserTypeProvider>(context, listen: false).setUser('tenant', tenantId!);
 
-
         print('Tenant authenticated successfully. ID: $tenantId');
         Navigator.pushReplacement(
           context,
@@ -246,12 +245,11 @@ class _LoginViewState extends State<LoginView> {
 
 class UserTypeProvider with ChangeNotifier {
   String? _userType; // "tenant" o "landlord"
-  int? _userId;      // ID del usuario
+  int? _userId;
 
   String? get userType => _userType;
   int? get userId => _userId;
 
-  // Establece el tipo de usuario y su ID
   void setUser(String userType, int userId) {
     _userType = userType;
     _userId = userId;

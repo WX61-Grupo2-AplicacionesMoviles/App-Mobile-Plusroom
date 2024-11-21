@@ -226,7 +226,8 @@ class _WelcomeViewState extends State<WelcomeView> {
                         );
                       }).toList() ,
                       options: CarouselOptions(
-                          viewportFraction: 01,
+                          height: 230,
+                          viewportFraction: 1,
                           autoPlay: true,
                           aspectRatio: 2.0,
                           onPageChanged: (index, reason) {

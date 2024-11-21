@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app_mobile_plusroom/ui-initial-section/login_view.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/welcome_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -30,6 +31,7 @@ class _AuthorProfileState extends State<AuthorProfile> {
 
   @override
   Widget build(BuildContext context) {
+    final userTypeProvider = Provider.of<UserTypeProvider>(context);
     final landlordProvider = Provider.of<LandlordProvider>(context, listen: true);
     final landlord = landlordProvider.landlords.firstWhere((l) => l.id == widget.landlordId);
 
@@ -108,7 +110,9 @@ class _AuthorProfileState extends State<AuthorProfile> {
 
                         SizedBox(height: 20),
 
-
+                        userTypeProvider.isLandlord
+                            ? SizedBox()
+                            :
                         Column(
                           children: [
                             Text(
