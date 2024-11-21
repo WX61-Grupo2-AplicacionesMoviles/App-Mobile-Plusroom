@@ -1,6 +1,7 @@
 import 'package:app_mobile_plusroom/router/customRoutes.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/init_view.dart';
 import 'package:app_mobile_plusroom/pages/roomie_search_page.dart';
+import 'package:app_mobile_plusroom/ui-initial-section/login_view.dart';
 import 'package:app_mobile_plusroom/ui-initial-section/welcome_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LandlordProvider()),
+        ChangeNotifierProvider(create: (_) => UserTypeProvider()),
       ],
       child: const MyApp(),
     ),

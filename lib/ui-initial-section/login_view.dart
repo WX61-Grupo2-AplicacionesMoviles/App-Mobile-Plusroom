@@ -5,6 +5,8 @@ import 'package:app_mobile_plusroom/ui-initial-section/register_view_landlord.da
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:provider/provider.dart';
+
 int? tenantId; // Variable to store tenant ID
 int? landlordId; // Variable to store landlord ID
 
@@ -40,6 +42,11 @@ class _LoginViewState extends State<LoginView> {
       final responseData = jsonDecode(tenantResponse.body);
       if (responseData is int) {
         tenantId = responseData; // Store tenant ID
+
+        // Set the user type as "tenant"
+        Provider.of<UserTypeProvider>(context, listen: false).setUser('tenant', tenantId!);
+
+
         print('Tenant authenticated successfully. ID: $tenantId');
         Navigator.pushReplacement(
           context,
@@ -67,6 +74,10 @@ class _LoginViewState extends State<LoginView> {
       final responseData = jsonDecode(landlordResponse.body);
       if (responseData is int) {
         landlordId = responseData; // Store landlord ID
+
+        // Set the user type as "landlord"
+        Provider.of<UserTypeProvider>(context, listen: false).setUser('landlord', landlordId!);
+
         print('Landlord authenticated successfully. ID: $landlordId');
         Navigator.pushReplacement(
           context,
@@ -231,4 +242,22 @@ class _LoginViewState extends State<LoginView> {
       ),
     );
   }
+}
+
+class UserTypeProvider with ChangeNotifier {
+  String? _userType; // "tenant" o "landlord"
+  int? _userId;      // ID del usuario
+
+  String? get userType => _userType;
+  int? get userId => _userId;
+
+  // Establece el tipo de usuario y su ID
+  void setUser(String userType, int userId) {
+    _userType = userType;
+    _userId = userId;
+    notifyListeners();
+  }
+
+  bool get isTenant => _userType == 'tenant';
+  bool get isLandlord => _userType == 'landlord';
 }
