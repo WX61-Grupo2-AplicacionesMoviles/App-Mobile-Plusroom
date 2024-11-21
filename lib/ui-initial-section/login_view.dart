@@ -43,6 +43,7 @@ class _LoginViewState extends State<LoginView> {
       final responseData = jsonDecode(tenantResponse.body);
       if (responseData is int) {
         CurrentUser().setId(responseData);
+        CurrentUser().setRole('tenant');
         tenantId = responseData; // Store tenant ID
 
         // Set the user type as "tenant"
@@ -75,6 +76,7 @@ class _LoginViewState extends State<LoginView> {
       final responseData = jsonDecode(landlordResponse.body);
       if (responseData is int) {
         CurrentUser().setId(responseData);
+        CurrentUser().setRole('landlord');
         landlordId = responseData; // Store landlord ID
 
         // Set the user type as "landlord"

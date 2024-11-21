@@ -76,7 +76,8 @@ class PostDetail extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => RequestForm(landlordId: post.landlordId),
+                      builder: (context) => RequestForm( landlordId: post.landlordId,
+                        postId: post.id,),
                     ),
                   );
                 } catch (error) {
