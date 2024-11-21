@@ -24,7 +24,7 @@ class PostService {
   }
 
   // Método para crear una nueva publicación
-  Future<void> createPost(Post post) async {
+  Future<Post> createPost(Post post) async {
     try {
       final response = await http.post(
         Uri.parse(apiUrl),
@@ -47,7 +47,12 @@ class PostService {
         }),
       );
 
-      if (response.statusCode != 201) {
+      if (response.statusCode == 201) {
+        // Decodifica la respuesta del backend y devuelve el objeto `Post` creado
+        final Map<String, dynamic> jsonResponse =
+        json.decode(utf8.decode(response.bodyBytes));
+        return Post.fromJson(jsonResponse);
+      } else {
         print("Error al crear publicación. Código: ${response.statusCode}");
         print("Cuerpo de la respuesta: ${response.body}");
         throw Exception("Error ${response.statusCode}: No se pudo crear la publicación. ${response.body}");
@@ -56,6 +61,7 @@ class PostService {
       throw Exception("Error de red: $e");
     }
   }
+
 
   // Método para actualizar una publicación existente
   Future<void> updatePost(Post post) async {
